@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 final class AutoInstaller
 {
-    /**
-     * Tables minimales attendues pour considérer le schéma comme initialisé.
-     * Si une seule manque, l'application est considérée non prête.
-     */
+    // Tables minimales pour considérer le schéma comme initialisé
     private const REQUIRED_TABLES = [
         'categories',
         'users',
@@ -55,6 +52,7 @@ final class AutoInstaller
                 continue;
             }
 
+            // Neutralise les commandes interdites en hébergement mutualisé
             if (preg_match('/^(DROP\s+DATABASE|CREATE\s+DATABASE|USE\s+)/i', $statement)) {
                 continue;
             }
@@ -81,8 +79,7 @@ final class AutoInstaller
         $missing = [];
 
         foreach (self::REQUIRED_TABLES as $table) {
-            // MySQL n'accepte pas les placeholders prepares dans "SHOW TABLES LIKE ...".
-            // On quote explicitement la valeur pour conserver une requete sure.
+            // MySQL n'accepte pas les placeholders dans SHOW TABLES LIKE
             $sql = 'SHOW TABLES LIKE ' . $pdo->quote($table);
             $stmt = $pdo->query($sql);
 

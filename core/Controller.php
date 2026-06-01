@@ -1,16 +1,8 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Controller – Classe de base pour tous les contrôleurs.
- * Fournit le rendu de vues, les redirections et les réponses JSON.
- */
 abstract class Controller
 {
-    /**
-     * Inclut header, la vue demandée et footer.
-     * Les clés du tableau $data deviennent des variables locales dans la vue.
-     */
     protected function render(string $view, array $data = []): void
     {
         extract($data, EXTR_SKIP);
@@ -26,18 +18,12 @@ abstract class Controller
         require VIEWS_PATH . '/layouts/footer.php';
     }
 
-    /**
-     * Redirige vers un chemin relatif à APP_URL.
-     */
     protected function redirect(string $path): never
     {
         header('Location: ' . APP_URL . $path);
         exit;
     }
 
-    /**
-     * Renvoie une réponse JSON.
-     */
     protected function json(mixed $data, int $status = 200): never
     {
         http_response_code($status);

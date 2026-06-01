@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/core/Model.php';
 
-/**
- * Category – Référentiel des catégories de véhicules.
- */
 class Category extends Model
 {
     public function all(): array

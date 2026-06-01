@@ -3,23 +3,9 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/core/Model.php';
 
-/**
- * Vehicle – Gestion des véhicules publiés sur la plateforme.
- */
 class Vehicle extends Model
 {
-    // ── Lecture publique ──────────────────────────────
-
-    /**
-     * Recherche avec filtres (catégorie, disponibilité, marque, prix max).
-     *
-     * Disponibilité : utilise NOT EXISTS plutôt que NOT IN pour de meilleures
-     * performances — MySQL peut court-circuiter dès le premier conflit trouvé
-     * dans la sous-requête, sans matérialiser l'ensemble des vehicle_id bloqués.
-     *
-     * Condition de chevauchement : la réservation R bloque le créneau [S, E] si
-     *   R.start_date < E  AND  R.end_date > S  (intersection non nulle)
-     */
+    // Recherche avec NOT EXISTS pour meilleures performances
     public function search(array $filters = []): array
     {
         $sql = '
@@ -47,8 +33,6 @@ class Vehicle extends Model
         }
 
         if (!empty($filters['start_date']) && !empty($filters['end_date'])) {
-            // NOT EXISTS : plus efficace que NOT IN sur grands volumes
-            // L'index (vehicle_id, status, start_date, end_date) est utilisé
             $sql .= "
                 AND NOT EXISTS (
                     SELECT 1
@@ -79,7 +63,6 @@ class Vehicle extends Model
         ', ['id' => $id]);
     }
 
-    // ── Lecture propriétaire / admin ──────────────────
 
     public function findByOwner(int $ownerId): array
     {
@@ -108,9 +91,6 @@ class Vehicle extends Model
         return (int) ($this->fetchOne('SELECT COUNT(*) AS n FROM vehicles')['n'] ?? 0);
     }
 
-    /**
-     * Statistiques agrégées pour le dashboard admin.
-     */
     public function statsForAdmin(): array
     {
         $row = $this->fetchOne("
@@ -124,7 +104,6 @@ class Vehicle extends Model
         return $row ?: ['total' => 0, 'nb_active' => 0, 'nb_inactive' => 0];
     }
 
-    // ── Écriture ──────────────────────────────────────
 
     public function create(array $data): int
     {
@@ -167,12 +146,7 @@ class Vehicle extends Model
         return $this->execute('DELETE FROM vehicles WHERE id = :id', ['id' => $id]);
     }
 
-    // ── Upload image ──────────────────────────────────
 
-    /**
-     * Déplace et valide un fichier image uploadé.
-     * Retourne le nom de fichier final ou null en cas d'erreur.
-     */
     public function handleImageUpload(array $file): ?string
     {
         if ($file['error'] !== UPLOAD_ERR_OK) {
@@ -193,9 +167,7 @@ class Vehicle extends Model
             return null;
         }
 
-        // Vérification supplémentaire : s'assurer que le binaire est réellement une image.
-        // getimagesize() analyse les en-têtes du fichier, pas seulement l'extension.
-        // Défense en profondeur contre les fichiers polyglot (ex: image.php.jpg valide en MIME).
+        // Vérification binaire contre fichiers polyglot
         if (@getimagesize($file['tmp_name']) === false) {
             return null;
         }

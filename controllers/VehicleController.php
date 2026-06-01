@@ -5,19 +5,14 @@ require_once ROOT_PATH . '/models/Vehicle.php';
 require_once ROOT_PATH . '/models/Category.php';
 require_once ROOT_PATH . '/models/Reservation.php';
 
-/**
- * VehicleController – Listing, recherche, CRUD véhicules.
- */
 class VehicleController extends Controller
 {
-    // ── Public ────────────────────────────────────────
-
     public function index(): void
     {
         $vehicleModel  = new Vehicle();
         $categoryModel = new Category();
 
-        // ── Lecture et nettoyage des filtres GET ──────
+
         $categoryId = isset($_GET['category_id']) && ctype_digit($_GET['category_id'])
             ? (int) $_GET['category_id'] : null;
 
@@ -26,7 +21,7 @@ class VehicleController extends Controller
         $startRaw = isset($_GET['start_date']) ? trim($_GET['start_date']) : null;
         $endRaw   = isset($_GET['end_date'])   ? trim($_GET['end_date'])   : null;
 
-        // ── Validation des dates ──────────────────────
+
         $dateError  = null;
         $startDate  = null;
         $endDate    = null;
@@ -54,7 +49,6 @@ class VehicleController extends Controller
             }
         }
 
-        // Si une seule des deux dates est fournie, on ignore les deux
         if (($startDate === null) !== ($endDate === null)) {
             $startDate = null;
             $endDate   = null;
@@ -76,7 +70,7 @@ class VehicleController extends Controller
             'vehicles'   => $vehicleModel->search($filters),
             'categories' => $categoryModel->all(),
             'filters'    => $filters,
-            'raw'        => [               // valeurs brutes pour repeupler le form
+            'raw'        => [
                 'start_date'  => $startRaw  ?? '',
                 'end_date'    => $endRaw    ?? '',
                 'brand'       => $brand     ?? '',
@@ -99,7 +93,7 @@ class VehicleController extends Controller
             return;
         }
 
-        // Périodes déjà réservées → sérialisées en JSON pour le JS du formulaire
+        // Périodes déjà réservées pour le JS
         $reservationModel = new Reservation();
         $blockedPeriods   = $reservationModel->getBlockedPeriods((int) $id);
 
@@ -112,7 +106,6 @@ class VehicleController extends Controller
         ]);
     }
 
-    // ── Owner : création ──────────────────────────────
 
     public function createForm(): void
     {
@@ -143,7 +136,6 @@ class VehicleController extends Controller
             $this->redirect('/vehicles/create');
         }
 
-        // Limites de longueur (protection contre dépassement de colonne SQL et garbage data)
         if (mb_strlen($title) > 100 || mb_strlen($brand) > 50
             || mb_strlen($model) > 50 || mb_strlen($registration) > 20
             || mb_strlen($description) > 2000 || $pricePerDay > 9999.99) {
@@ -151,7 +143,6 @@ class VehicleController extends Controller
             $this->redirect('/vehicles/create');
         }
 
-        // Format immatriculation : lettres, chiffres et tirets uniquement
         if (!preg_match('/^[A-Z0-9\- ]{2,20}$/i', $registration)) {
             Session::flash('error', 'Format d\'immatriculation invalide.');
             $this->redirect('/vehicles/create');
@@ -184,7 +175,6 @@ class VehicleController extends Controller
         $this->redirect('/dashboard/owner');
     }
 
-    // ── Owner : modification ──────────────────────────
 
     public function editForm(string $id): void
     {
@@ -221,7 +211,6 @@ class VehicleController extends Controller
             $this->redirect('/vehicles/' . $id . '/edit');
         }
 
-        // Limites de longueur
         if (mb_strlen($title) > 100 || mb_strlen($brand) > 50
             || mb_strlen($model) > 50 || mb_strlen($registration) > 20
             || mb_strlen($description) > 2000 || $pricePerDay > 9999.99) {
@@ -242,7 +231,6 @@ class VehicleController extends Controller
                 Session::flash('error', 'Image invalide. Formats acceptés : JPG, PNG, WEBP (max 5 Mo).');
                 $this->redirect('/vehicles/' . $id . '/edit');
             }
-            // Supprime l'ancienne image
             if ($mainImage && file_exists(UPLOAD_PATH . $mainImage)) {
                 unlink(UPLOAD_PATH . $mainImage);
             }
@@ -264,7 +252,6 @@ class VehicleController extends Controller
         $this->redirect('/dashboard/owner');
     }
 
-    // ── Owner : suppression ───────────────────────────
 
     public function delete(string $id): void
     {
@@ -284,7 +271,6 @@ class VehicleController extends Controller
         $this->redirect('/dashboard/owner');
     }
 
-    // ── Owner : toggle statut ─────────────────────────
 
     public function toggleStatus(string $id): void
     {

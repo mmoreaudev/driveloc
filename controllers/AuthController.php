@@ -3,23 +3,8 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/models/User.php';
 
-/**
- * AuthController – Inscription, connexion, déconnexion, profil, mot de passe.
- *
- * Routes gérées :
- *   GET  /login              → loginForm()
- *   POST /login              → login()
- *   GET  /register           → registerForm()
- *   POST /register           → register()
- *   GET  /logout             → logout()
- *   GET  /profile            → profileForm()
- *   POST /profile            → updateProfile()
- *   POST /profile/password   → changePassword()
- */
 class AuthController extends Controller
 {
-    // ── Connexion ─────────────────────────────────────
-
     public function loginForm(): void
     {
         Security::requireGuest();
@@ -43,7 +28,7 @@ class AuthController extends Controller
             $this->redirect('/login');
         }
 
-        // Protection brute-force : 5 tentatives par IP+email dans la fenêtre de 5 minutes
+        // Protection brute-force
         $rateLimitKey = 'login:' . $email . ':' . ($_SERVER['REMOTE_ADDR'] ?? '');
         Security::checkRateLimit($rateLimitKey, 5, 300);
 
@@ -60,7 +45,6 @@ class AuthController extends Controller
             $this->redirect('/login');
         }
 
-        // Régénère l'ID de session pour prévenir la fixation de session
         session_regenerate_id(true);
 
         Session::set('user_id',        (int) $user['id']);
@@ -69,17 +53,15 @@ class AuthController extends Controller
         Session::set('user_lastname',  $user['lastname']);
         Session::set('user_status',    $user['status']);
 
-        // Réinitialise le rate limit sur succès
         Security::clearRateLimit('login:' . $email);
 
-        // Redirige vers la page initialement demandée — validée contre l'open redirect
+        // Redirection sécurisée vers la page initialement demandée
         $fallback = '/dashboard/' . $user['role'];
         $stored   = Session::get('_redirect_after_login', $fallback);
         Session::remove('_redirect_after_login');
         $this->redirect(Security::safeRedirect($stored, $fallback));
     }
 
-    // ── Inscription ───────────────────────────────────
 
     public function registerForm(): void
     {
@@ -103,7 +85,6 @@ class AuthController extends Controller
         $confirm   = $_POST['password_confirm']      ?? '';
         $role      = $_POST['role']                  ?? 'client';
 
-        // Seuls les rôles client et owner sont autorisés à l'inscription publique
         if (!in_array($role, ['client', 'owner'], true)) {
             $role = 'client';
         }
@@ -113,13 +94,11 @@ class AuthController extends Controller
             $this->redirect('/register');
         }
 
-        // Limites de longueur et caractères autorisés
         if (mb_strlen($firstname) > 50 || mb_strlen($lastname) > 50 || mb_strlen($email) > 150) {
             Session::flash('error', 'Une ou plusieurs valeurs dépassent la taille autorisée.');
             $this->redirect('/register');
         }
 
-        // Noms : lettres, espaces, tirets, apostrophes uniquement
         if (!preg_match('/^[\p{L}\s\-\']{1,50}$/u', $firstname)
             || !preg_match('/^[\p{L}\s\-\']{1,50}$/u', $lastname)) {
             Session::flash('error', 'Le nom ne doit contenir que des lettres.');
@@ -154,7 +133,6 @@ class AuthController extends Controller
         $this->redirect('/login');
     }
 
-    // ── Déconnexion ───────────────────────────────────
 
     public function logout(): void
     {
@@ -164,7 +142,6 @@ class AuthController extends Controller
         exit;
     }
 
-    // ── Profil ────────────────────────────────────────
 
     public function profileForm(): void
     {
@@ -210,7 +187,6 @@ class AuthController extends Controller
 
         $userModel->updateProfile(Session::userId(), $firstname, $lastname, $email);
 
-        // Met à jour la session avec les nouvelles valeurs
         Session::set('user_firstname', $firstname);
         Session::set('user_lastname',  $lastname);
 
@@ -252,7 +228,6 @@ class AuthController extends Controller
 
         $userModel->changePassword(Session::userId(), $new);
 
-        // Régénère la session après changement de mot de passe
         session_regenerate_id(true);
 
         Session::flash('success_pwd', 'Mot de passe modifié avec succès.');

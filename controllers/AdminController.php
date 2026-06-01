@@ -6,13 +6,8 @@ require_once ROOT_PATH . '/models/Vehicle.php';
 require_once ROOT_PATH . '/models/Reservation.php';
 require_once ROOT_PATH . '/models/Category.php';
 
-/**
- * AdminController – Tableau de bord et modération pour l'administrateur.
- */
 class AdminController extends Controller
 {
-    // ── Dashboard stats ───────────────────────────────
-
     public function index(): void
     {
         Security::requireRole('admin');
@@ -32,7 +27,6 @@ class AdminController extends Controller
         ]);
     }
 
-    // ── Utilisateurs ──────────────────────────────────
 
     public function users(): void
     {
@@ -86,7 +80,6 @@ class AdminController extends Controller
         $this->redirect('/dashboard/admin/users');
     }
 
-    // ── Véhicules ─────────────────────────────────────
 
     public function vehicles(): void
     {

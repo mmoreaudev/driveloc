@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/services/ReservationService.php';
 
-/**
- * ReservationController – Création et annulation de réservations.
- */
 class ReservationController extends Controller
 {
     public function create(): void

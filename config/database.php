@@ -1,13 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Database – Singleton PDO
- *
- * Résolution des credentials (par priorité) :
- *   1. Variables d'environnement — Render, Docker Compose, hébergeur
- *   2. Valeurs par défaut — développement local Docker
- */
 final class Database
 {
     private static ?PDO $instance = null;

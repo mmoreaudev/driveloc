@@ -4,9 +4,6 @@ declare(strict_types=1);
 require_once ROOT_PATH . '/models/Reservation.php';
 require_once ROOT_PATH . '/models/Vehicle.php';
 
-/**
- * DashboardController – Tableaux de bord client et propriétaire.
- */
 class DashboardController extends Controller
 {
     public function client(): void
@@ -17,7 +14,6 @@ class DashboardController extends Controller
         $reservations     = $reservationModel->findByClient(Session::userId());
         $stats            = $reservationModel->statsForClient(Session::userId());
 
-        // Répartition par statut
         $upcoming = array_values(array_filter($reservations, fn($r) => $r['status'] === 'upcoming'));
         $ongoing  = array_values(array_filter($reservations, fn($r) => $r['status'] === 'ongoing'));
         $past     = array_values(array_filter($reservations,
@@ -46,7 +42,6 @@ class DashboardController extends Controller
         $reservations = $reservationModel->findByOwner($ownerId);
         $stats        = $reservationModel->statsForOwner($ownerId);
 
-        // Répartition par statut pour les onglets
         $resUpcoming  = array_values(array_filter($reservations, fn($r) => $r['status'] === 'upcoming'));
         $resOngoing   = array_values(array_filter($reservations, fn($r) => $r['status'] === 'ongoing'));
         $resPast      = array_values(array_filter($reservations,

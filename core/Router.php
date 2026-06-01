@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Router – Dispatche les requêtes HTTP vers le bon contrôleur/action.
- * Supporte les paramètres de route sous forme de groupes de capture regex (ex: (\d+)).
- */
 class Router
 {
     private array $routes = [];

@@ -3,22 +3,9 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/core/Model.php';
 
-/**
- * Reservation – Gestion des réservations.
- */
 class Reservation extends Model
 {
-    // ── Disponibilité ─────────────────────────────────
-
-    /**
-     * Vérifie qu'aucune réservation active ne chevauche la période demandée.
-     *
-     * Utilise SELECT 1 … LIMIT 1 plutôt que COUNT(*) : MySQL peut court-circuiter
-     * dès le premier conflit trouvé, sans parcourir toutes les lignes.
-     *
-     * Condition de chevauchement (intervalles [S,E[ non vides) :
-     *   start_date < :end_date  AND  end_date > :start_date
-     */
+    // Utilise SELECT 1 pour court-circuiter dès le premier conflit
     public function isAvailable(int $vehicleId, string $startDate, string $endDate): bool
     {
         $row = $this->fetchOne("
@@ -34,11 +21,6 @@ class Reservation extends Model
         return $row === false;
     }
 
-    /**
-     * Retourne toutes les périodes actives d'un véhicule sous la forme
-     * [['start' => 'YYYY-MM-DD', 'end' => 'YYYY-MM-DD'], …]
-     * Utilisé par le JS du formulaire pour désactiver les dates occupées.
-     */
     public function getBlockedPeriods(int $vehicleId): array
     {
         return $this->fetchAll("
@@ -51,7 +33,6 @@ class Reservation extends Model
         ", ['vehicle_id' => $vehicleId]);
     }
 
-    // ── Création ──────────────────────────────────────
 
     public function create(
         int    $vehicleId,
@@ -73,7 +54,6 @@ class Reservation extends Model
         return $this->lastId();
     }
 
-    // ── Lecture ───────────────────────────────────────
 
     public function findById(int $id): array|false
     {
@@ -83,10 +63,6 @@ class Reservation extends Model
         );
     }
 
-    /**
-     * Toutes les réservations d'un client, triées par date décroissante.
-     * Inclut price_per_day du véhicule pour le détail de calcul.
-     */
     public function findByClient(int $clientId): array
     {
         return $this->fetchAll('

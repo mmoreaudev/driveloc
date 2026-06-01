@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Session – Gestion centralisée des sessions PHP.
- * Fournit : démarrage sécurisé, lecture/écriture, messages flash, helpers auth.
- */
 final class Session
 {
     public static function start(): void
@@ -51,7 +47,7 @@ final class Session
         session_destroy();
     }
 
-    // ── Flash messages ────────────────────────────────
+
     public static function flash(string $key, string $message): void
     {
         $_SESSION['_flash'][$key] = $message;
@@ -64,7 +60,7 @@ final class Session
         return $msg;
     }
 
-    // ── Auth helpers ──────────────────────────────────
+
     public static function isLoggedIn(): bool
     {
         return isset($_SESSION['user_id']);

@@ -3,13 +3,8 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/core/Model.php';
 
-/**
- * User – Gestion des comptes utilisateurs.
- */
 class User extends Model
 {
-    // ── Lecture ───────────────────────────────────────
-
     public function findById(int $id): array|false
     {
         return $this->fetchOne(
@@ -21,7 +16,6 @@ class User extends Model
 
     public function findByEmail(string $email): array|false
     {
-        // Inclut le mot de passe pour la vérification à la connexion
         return $this->fetchOne(
             'SELECT * FROM users WHERE email = :email LIMIT 1',
             ['email' => $email]
@@ -57,10 +51,6 @@ class User extends Model
         return (int) ($this->fetchOne('SELECT COUNT(*) AS n FROM users')['n'] ?? 0);
     }
 
-    /**
-     * Répartition des comptes par rôle et par statut.
-     * Une seule requête SQL pour le dashboard admin.
-     */
     public function statsByRole(): array
     {
         $row = $this->fetchOne("
@@ -80,8 +70,6 @@ class User extends Model
             'nb_active'   => 0, 'nb_inactive' => 0,
         ];
     }
-
-    // ── Écriture ──────────────────────────────────────
 
     public function create(
         string $firstname,
@@ -125,12 +113,6 @@ class User extends Model
         return $this->execute('DELETE FROM users WHERE id = :id', ['id' => $id]);
     }
 
-    // ── Gestion du mot de passe ───────────────────────
-
-    /**
-     * Vérifie le mot de passe actuel d'un utilisateur.
-     * Charge le hash depuis la base (findById n'inclut pas le mot de passe).
-     */
     public function verifyPassword(int $id, string $plainPassword): bool
     {
         $row = $this->fetchOne(
@@ -143,10 +125,6 @@ class User extends Model
         return password_verify($plainPassword, $row['password']);
     }
 
-    /**
-     * Met à jour le hash de mot de passe d'un utilisateur.
-     * Régénère toujours un nouveau hash avec le coût bcrypt défini.
-     */
     public function changePassword(int $id, string $newPassword): bool
     {
         return $this->execute(
@@ -158,12 +136,6 @@ class User extends Model
         );
     }
 
-    // ── Validation des entrées ────────────────────────
-
-    /**
-     * Valide la solidité minimale d'un mot de passe.
-     * Retourne un message d'erreur ou null si valide.
-     */
     public static function validatePassword(string $password): ?string
     {
         if (strlen($password) < 8) {

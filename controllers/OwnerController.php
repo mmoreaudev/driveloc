@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 require_once ROOT_PATH . '/models/Reservation.php';
 
-/**
- * OwnerController – Réservations reçues par le propriétaire.
- */
 class OwnerController extends Controller
 {
     public function reservations(): void
