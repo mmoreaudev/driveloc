@@ -1,0 +1,117 @@
+// ================================================================
+// DriveLoc – Diagramme de base de données (DBML)
+// Format : Database Markup Language — https://dbml.dbdiagramio.com
+// Import  : dbdiagram.io → "Import DBML"
+// ================================================================
+
+Project DriveLoc {
+  database_type: 'MySQL'
+  Note: '''
+    Plateforme de location de véhicules entre particuliers.
+    PHP 8 · MySQL 8 · utf8mb4_unicode_ci
+  '''
+}
+
+// ────────────────────────────────────────────────────────────────
+// TABLE : categories
+// Référentiel des types de véhicules (Citadine, SUV, Moto…)
+// ────────────────────────────────────────────────────────────────
+Table categories [headercolor: #f6c90e, note: 'Référentiel des types de véhicules'] {
+  id         int      [pk, increment,  note: 'Clé primaire auto-incrémentée']
+  nom        varchar  [not null, unique, note: 'Libellé unique de la catégorie']
+  cree_le    datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    nom [name: 'uq_categories_nom', unique]
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// TABLE : utilisateurs
+// Tous les comptes : clients, propriétaires, administrateurs
+// ────────────────────────────────────────────────────────────────
+Table utilisateurs [headercolor: #3d5a80, note: 'Comptes utilisateurs – rôles : client | proprietaire | admin'] {
+  id            int      [pk, increment]
+  prenom        varchar  [not null]
+  nom           varchar  [not null]
+  email         varchar  [not null, unique, note: 'Utilisé comme identifiant de connexion']
+  mot_de_passe  varchar  [not null, note: 'Hash bcrypt – password_hash() cost 12']
+  role          varchar  [not null, default: 'client', note: "ENUM('client','owner','admin')"]
+  statut        varchar  [not null, default: 'actif',  note: "ENUM('active','inactive')"]
+  cree_le       datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    email [name: 'idx_utilisateurs_email']
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// TABLE : vehicules
+// Annonces de véhicules publiées par les propriétaires
+// ────────────────────────────────────────────────────────────────
+Table vehicules [headercolor: #e76f51, note: 'Annonces de véhicules à louer'] {
+  id               int      [pk, increment]
+  proprietaire_id  int      [not null, ref: > utilisateurs.id, note: 'FK → utilisateurs (rôle owner)']
+  categorie_id     int      [not null, ref: > categories.id,   note: 'FK → categories']
+  titre            varchar  [not null, note: 'Titre de l\'annonce']
+  marque           varchar  [not null, note: 'Marque (ex : Renault)']
+  modele           varchar  [not null, note: 'Modèle (ex : Clio 5)']
+  immatriculation  varchar  [not null, note: 'Immatriculation ou référence interne']
+  prix_jour        decimal  [not null, note: 'Prix journalier en € — CHECK > 0']
+  description      text     [null]
+  photo_principale varchar  [null,     note: 'Nom de fichier de la photo principale']
+  statut           varchar  [not null, default: 'actif', note: "ENUM('active','inactive')"]
+  cree_le          datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (categorie_id, statut) [name: 'idx_vehicules_categorie_statut']
+    proprietaire_id        [name: 'idx_vehicules_proprietaire']
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// TABLE : images_vehicule
+// Photos supplémentaires (galerie) d'un véhicule
+// ────────────────────────────────────────────────────────────────
+Table images_vehicule [headercolor: #e9c46a, note: 'Galerie d\'images supplémentaires'] {
+  id             int      [pk, increment]
+  vehicule_id    int      [not null, ref: > vehicules.id, note: 'FK → vehicules (CASCADE DELETE)']
+  nom_fichier    varchar  [not null, note: 'Nom du fichier uploadé']
+  ordre_affichage tinyint [not null, default: 0, note: 'Ordre d\'affichage dans la galerie']
+  envoye_le      datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (vehicule_id, ordre_affichage) [name: 'idx_images_vehicule_ordre']
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// TABLE : reservations
+// Réservations effectuées par les clients
+// ────────────────────────────────────────────────────────────────
+Table reservations [headercolor: #2a9d8f, note: 'Réservations de véhicules'] {
+  id          int      [pk, increment]
+  vehicule_id int      [not null, ref: > vehicules.id,     note: 'FK → vehicules']
+  client_id   int      [not null, ref: > utilisateurs.id,  note: 'FK → utilisateurs (rôle client)']
+  date_debut  date     [not null, note: 'Date de début de location']
+  date_fin    date     [not null, note: 'Date de fin — CHECK > date_debut']
+  prix_total  decimal  [not null, note: 'prix_jour × nb_jours — CHECK > 0']
+  statut      varchar  [not null, default: 'a_venir',
+                        note: "ENUM('upcoming','ongoing','done','cancelled')"]
+  cree_le     datetime [not null, default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (vehicule_id, date_debut, date_fin) [name: 'idx_reservations_vehicule_dates',
+                                         note: 'Requête critique de disponibilité']
+    (client_id, statut)                 [name: 'idx_reservations_client_statut']
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// RELATIONS (récapitulatif)
+// ────────────────────────────────────────────────────────────────
+// Ref: vehicules.proprietaire_id  > utilisateurs.id   // Plusieurs-à-un
+// Ref: vehicules.categorie_id     > categories.id      // Plusieurs-à-un
+// Ref: images_vehicule.vehicule_id > vehicules.id      // Plusieurs-à-un (CASCADE)
+// Ref: reservations.vehicule_id   > vehicules.id       // Plusieurs-à-un
+// Ref: reservations.client_id     > utilisateurs.id    // Plusieurs-à-un

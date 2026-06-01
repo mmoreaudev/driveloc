@@ -1,0 +1,63 @@
+/* ============================================================
+   DriveLoc – Styles personnalisés
+   Bootstrap 5 est la base ; ce fichier complète uniquement.
+   ============================================================ */
+
+/* ── Général ─────────────────────────────────────────── */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Navbar ──────────────────────────────────────────── */
+.navbar-brand {
+    letter-spacing: -0.5px;
+}
+
+/* ── Cards véhicules ─────────────────────────────────── */
+.card {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-2px);
+}
+
+/* ── Images cover ────────────────────────────────────── */
+.object-fit-cover {
+    object-fit: cover;
+}
+
+/* ── Badges ──────────────────────────────────────────── */
+.w-fit {
+    width: fit-content;
+}
+
+/* ── Tables ──────────────────────────────────────────── */
+.table th {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Boutons ─────────────────────────────────────────── */
+.btn {
+    border-radius: 6px;
+}
+
+/* ── Dashboard stats ─────────────────────────────────── */
+.card .bi {
+    line-height: 1;
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+footer {
+    border-top: 3px solid #ffc107;
+}
+
+/* ── Responsive images ───────────────────────────────── */
+@media (max-width: 576px) {
+    .card-img-top {
+        height: 160px !important;
+    }
+}

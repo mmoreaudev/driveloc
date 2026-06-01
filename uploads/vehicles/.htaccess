@@ -1,0 +1,23 @@
+# ══════════════════════════════════════════════════════════════════
+#  Sécurisation du répertoire d'uploads
+#  Objectif : empêcher toute exécution de scripts dans ce dossier.
+#  Un attaquant qui parviendrait à uploader un fichier .php ne
+#  pourrait pas l'exécuter via une requête HTTP directe.
+# ══════════════════════════════════════════════════════════════════
+
+# Désactive l'index de répertoire
+Options -Indexes -ExecCGI
+
+# Supprime le handler PHP pour tous les fichiers
+RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .phar
+
+# Force le type MIME à text/plain pour tout script potentiel
+<FilesMatch "\.(php[0-9]?|phtml|phar|pl|py|cgi|sh|rb|asp|aspx|jsp)$">
+    AddType text/plain .php .phtml .phar .php3 .php4 .php5 .php7 .php8
+    php_flag engine off
+</FilesMatch>
+
+# Headers de sécurité pour les fichiers servis depuis ce dossier
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>

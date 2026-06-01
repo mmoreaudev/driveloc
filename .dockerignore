@@ -1,0 +1,16 @@
+.git
+.gitignore
+.vscode
+.idea
+build
+data
+docker-compose.yml
+.env
+.env.*
+README.md
+scripts
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
