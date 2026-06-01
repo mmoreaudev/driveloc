@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+if ($requestPath === '/health') {
+    header('Content-Type: text/plain; charset=UTF-8');
+    echo 'ok';
+    exit;
+}
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/core/Session.php';
@@ -14,6 +21,7 @@ if (AutoInstaller::isEnabled()) {
     try {
         AutoInstaller::ensureDatabaseInitialized();
     } catch (Throwable $e) {
+        error_log('AutoInstaller failed: ' . $e->getMessage());
         http_response_code(500);
         echo 'Erreur d\'initialisation de la base de donnees.';
         exit;

@@ -4,14 +4,14 @@ services:
     runtime: docker
     plan: free
     autoDeploy: true
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
       - key: APP_URL
         sync: false
       - key: APP_ENV
         value: production
       - key: AUTO_INSTALL_DB
-        value: "true"
+        value: "false"
       - key: DB_HOST
         sync: false
       - key: DB_PORT
