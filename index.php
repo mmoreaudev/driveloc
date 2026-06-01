@@ -17,6 +17,19 @@ require_once __DIR__ . '/core/Controller.php';
 require_once __DIR__ . '/core/Router.php';
 require_once __DIR__ . '/core/AutoInstaller.php';
 
+if (!AutoInstaller::isEnabled()) {
+    try {
+        if (AutoInstaller::hasMissingRequiredTables()) {
+            http_response_code(503);
+            header('Content-Type: text/plain; charset=UTF-8');
+            echo "Base de donnees non initialisee. Activez AUTO_INSTALL_DB=true temporairement, redeployez, ouvrez / puis remettez AUTO_INSTALL_DB=false.";
+            exit;
+        }
+    } catch (Throwable $e) {
+        error_log('DB bootstrap check failed: ' . $e->getMessage());
+    }
+}
+
 if (AutoInstaller::isEnabled()) {
     try {
         AutoInstaller::ensureDatabaseInitialized();

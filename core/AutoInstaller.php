@@ -3,6 +3,18 @@ declare(strict_types=1);
 
 final class AutoInstaller
 {
+    /**
+     * Tables minimales attendues pour considérer le schéma comme initialisé.
+     * Si une seule manque, l'application est considérée non prête.
+     */
+    private const REQUIRED_TABLES = [
+        'categories',
+        'users',
+        'vehicles',
+        'vehicle_images',
+        'reservations',
+    ];
+
     public static function isEnabled(): bool
     {
         $value = getenv('AUTO_INSTALL_DB');
@@ -19,8 +31,7 @@ final class AutoInstaller
     {
         $pdo = Database::getInstance();
 
-        $stmt = $pdo->query("SHOW TABLES LIKE 'users'");
-        if ($stmt !== false && $stmt->fetchColumn()) {
+        if (self::missingTables($pdo) === []) {
             return;
         }
 
@@ -50,5 +61,34 @@ final class AutoInstaller
 
             $pdo->exec($statement);
         }
+
+        $remainingMissing = self::missingTables($pdo);
+        if ($remainingMissing !== []) {
+            throw new RuntimeException(
+                'Initialisation incomplète. Tables manquantes: ' . implode(', ', $remainingMissing)
+            );
+        }
+    }
+
+    public static function hasMissingRequiredTables(): bool
+    {
+        $pdo = Database::getInstance();
+        return self::missingTables($pdo) !== [];
+    }
+
+    private static function missingTables(PDO $pdo): array
+    {
+        $missing = [];
+
+        foreach (self::REQUIRED_TABLES as $table) {
+            $stmt = $pdo->prepare('SHOW TABLES LIKE :table_name');
+            $stmt->execute(['table_name' => $table]);
+
+            if ($stmt->fetchColumn() === false) {
+                $missing[] = $table;
+            }
+        }
+
+        return $missing;
     }
 }
