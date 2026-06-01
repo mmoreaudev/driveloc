@@ -135,11 +135,24 @@ class AdminController extends Controller
             $this->redirect('/dashboard/admin/vehicles');
         }
 
+        try {
+            $vehicleDeleted = $vehicleModel->delete($vehicleId);
+
+            if (!$vehicleDeleted) {
+                Session::flash('error', 'Suppression impossible: véhicule introuvable ou déjà supprimé.');
+                $this->redirect('/dashboard/admin/vehicles');
+            }
+        } catch (PDOException $e) {
+            // Cas courant: des réservations référencent encore ce véhicule (FK RESTRICT).
+            // On bascule en inactif pour le retirer du catalogue sans casser l'historique.
+            $vehicleModel->setStatus($vehicleId, 'inactive');
+            Session::flash('error', 'Suppression impossible: ce véhicule est lié à des réservations. Il a été désactivé.');
+            $this->redirect('/dashboard/admin/vehicles');
+        }
+
         if ($vehicle['main_image'] && file_exists(UPLOAD_PATH . $vehicle['main_image'])) {
             unlink(UPLOAD_PATH . $vehicle['main_image']);
         }
-
-        $vehicleModel->delete($vehicleId);
 
         Session::flash('success', 'Véhicule supprimé.');
         $this->redirect('/dashboard/admin/vehicles');
