@@ -423,7 +423,7 @@ function renderReservationCards(array $reservations, array $badgeMap): void {
 }
 
 
-<?php if ($error): ?>
+ if ($error): ?>
     <div class="alert alert-danger"><?= Security::e($error) ?></div>
 <?php endif; ?>
 <?php if ($success): ?>
