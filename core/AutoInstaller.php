@@ -81,10 +81,12 @@ final class AutoInstaller
         $missing = [];
 
         foreach (self::REQUIRED_TABLES as $table) {
-            $stmt = $pdo->prepare('SHOW TABLES LIKE :table_name');
-            $stmt->execute(['table_name' => $table]);
+            // MySQL n'accepte pas les placeholders prepares dans "SHOW TABLES LIKE ...".
+            // On quote explicitement la valeur pour conserver une requete sure.
+            $sql = 'SHOW TABLES LIKE ' . $pdo->quote($table);
+            $stmt = $pdo->query($sql);
 
-            if ($stmt->fetchColumn() === false) {
+            if ($stmt === false || $stmt->fetchColumn() === false) {
                 $missing[] = $table;
             }
         }
