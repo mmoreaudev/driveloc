@@ -15,8 +15,8 @@
     <!-- Styles personnalisés -->
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/style.css">
 </head>
-<body class="bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 
 <?php require VIEWS_PATH . '/layouts/navbar.php'; ?>
 
-<main class="container py-4">
+<main class="container py-4 flex-grow-1">

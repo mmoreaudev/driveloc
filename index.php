@@ -17,16 +17,29 @@ require_once __DIR__ . '/core/Controller.php';
 require_once __DIR__ . '/core/Router.php';
 require_once __DIR__ . '/core/AutoInstaller.php';
 
+$shouldLogBootstrapErrors = static function (): bool {
+    $flag = getenv('LOG_BOOTSTRAP_ERRORS');
+    if ($flag !== false && $flag !== '') {
+        $normalized = strtolower(trim($flag));
+        return in_array($normalized, ['1', 'true', 'yes', 'on'], true);
+    }
+
+    $appEnv = strtolower((string) (getenv('APP_ENV') ?: 'production'));
+    return $appEnv !== 'production';
+};
+
 if (!AutoInstaller::isEnabled()) {
     try {
         if (AutoInstaller::hasMissingRequiredTables()) {
             http_response_code(503);
-            header('Content-Type: text/plain; charset=UTF-8');
-            echo "Base de donnees non initialisee. Activez AUTO_INSTALL_DB=true temporairement, redeployez, ouvrez / puis remettez AUTO_INSTALL_DB=false.";
+            $maintenanceMessage = 'Base de donnees non initialisee. Activez AUTO_INSTALL_DB=true temporairement, redeployez, ouvrez la page d\'accueil puis remettez AUTO_INSTALL_DB=false.';
+            require VIEWS_PATH . '/errors/503.php';
             exit;
         }
     } catch (Throwable $e) {
-        error_log('DB bootstrap check failed: ' . $e->getMessage());
+        if ($shouldLogBootstrapErrors()) {
+            error_log('DB bootstrap check failed: ' . $e->getMessage());
+        }
     }
 }
 
@@ -34,9 +47,12 @@ if (AutoInstaller::isEnabled()) {
     try {
         AutoInstaller::ensureDatabaseInitialized();
     } catch (Throwable $e) {
-        error_log('AutoInstaller failed: ' . $e->getMessage());
-        http_response_code(500);
-        echo 'Erreur d\'initialisation de la base de donnees.';
+        if ($shouldLogBootstrapErrors()) {
+            error_log('AutoInstaller failed: ' . $e->getMessage());
+        }
+        http_response_code(503);
+        $maintenanceMessage = 'Erreur pendant l\'initialisation automatique de la base de donnees. Verifiez le script SQL et les variables DB_* puis redeployez.';
+        require VIEWS_PATH . '/errors/503.php';
         exit;
     }
 }

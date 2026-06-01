@@ -2,7 +2,7 @@
 
 </main>
 
-<footer class="bg-dark text-white py-4 mt-5">
+<footer class="bg-dark text-white py-4">
     <div class="container text-center">
         <p class="mb-1 fw-bold">
             <i class="bi bi-car-front-fill me-1"></i> DriveLoc
