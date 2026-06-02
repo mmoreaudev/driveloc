@@ -47,13 +47,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-4 text-end">
-                        <small class="text-muted">Rôles disponibles :
-                            <span class="badge bg-primary">client</span>
-                            <span class="badge bg-warning text-dark">owner</span>
-                            <span class="badge bg-danger">admin</span>
-                        </small>
-                    </div>
+  
 
                     <button type="submit" class="btn btn-dark w-100 fw-semibold" id="btnSubmit">
                         <span id="btnText">Se connecter</span>

@@ -6,10 +6,19 @@ final class Session
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
+            $isHttps = (
+                (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
+                || ((int) ($_SERVER['SERVER_PORT'] ?? 0) === 443)
+                || (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
+                    && strtolower(trim(explode(',', (string) $_SERVER['HTTP_X_FORWARDED_PROTO'])[0])) === 'https')
+                || (isset($_SERVER['HTTP_X_FORWARDED_SSL'])
+                    && strtolower((string) $_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
+            );
+
             session_set_cookie_params([
                 'lifetime' => 0,
                 'path'     => '/',
-                'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+                'secure'   => $isHttps,
                 'httponly' => true,
                 'samesite' => 'Strict',
             ]);
