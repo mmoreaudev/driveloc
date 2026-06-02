@@ -6,10 +6,10 @@
 </div>
 
 <?php if (!empty($error)): ?>
-    <div class="alert alert-danger"><?= Security::e((string) $error) ?></div>
+    <div class="alert alert-danger"><?= ((string) $error) ?></div>
 <?php endif; ?>
 <?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= Security::e((string) $success) ?></div>
+    <div class="alert alert-success"><?= ((string) $success) ?></div>
 <?php endif; ?>
 
 <div class="row g-3 mb-4">
@@ -36,14 +36,15 @@
                 <?php foreach ($recentRes as $r): ?>
                     <tr>
                         <td><?= (int) $r['id'] ?></td>
-                        <td><?= Security::e($r['client_firstname']) ?> <?= Security::e($r['client_lastname']) ?></td>
-                        <td><?= Security::e($r['vehicle_title']) ?></td>
-                        <td><?= Security::e((new DateTimeImmutable($r['start_date']))->format('d/m/Y')) ?> -> <?= Security::e((new DateTimeImmutable($r['end_date']))->format('d/m/Y')) ?></td>
+                        <td><?= ($r['client_firstname']) ?> <?= ($r['client_lastname']) ?></td>
+                        <td><?= ($r['vehicle_title']) ?></td>
+                        <td><?= ((new DateTimeImmutable($r['start_date']))->format('d/m/Y')) ?> -> <?= ((new DateTimeImmutable($r['end_date']))->format('d/m/Y')) ?></td>
                         <td class="text-end fw-bold"><?= number_format((float) $r['total_price'], 2, ',', ' ') ?> €</td>
-                        <td class="text-center"><span class="badge bg-secondary"><?= Security::e($r['status']) ?></span></td>
+                        <td class="text-center"><span class="badge bg-secondary"><?= ($r['status']) ?></span></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 <?php endif; ?>
+

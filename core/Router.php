@@ -20,7 +20,6 @@ class Router
         $method = $_SERVER['REQUEST_METHOD'];
         $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
 
-        // Supprime le préfixe du sous-dossier (ex: /driveloc)
         $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
         if ($base !== '' && str_starts_with($uri, $base)) {
             $uri = substr($uri, strlen($base));
@@ -36,7 +35,7 @@ class Router
             $pattern = '#^' . $routePath . '$#';
 
             if (preg_match($pattern, $uri, $matches)) {
-                array_shift($matches); // Supprime la correspondance complète
+                array_shift($matches);
                 $this->call($controllerName, $actionName, $matches);
                 return;
             }

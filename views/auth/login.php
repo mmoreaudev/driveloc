@@ -12,21 +12,19 @@
 
                 <?php if ($error): ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i><?= Security::e($error) ?>
+                        <i class="bi bi-exclamation-triangle me-2"></i><?= ($error) ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
 
                 <?php if ($success): ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="bi bi-check-circle me-2"></i><?= Security::e($success) ?>
+                        <i class="bi bi-check-circle me-2"></i><?= ($success) ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
 
                 <form method="POST" action="<?= APP_URL ?>/login" novalidate id="loginForm">
-                    <?= Security::csrfField() ?>
-
                     <div class="mb-3">
                         <label for="email" class="form-label fw-semibold">Adresse email</label>
                         <input type="email" id="email" name="email"
@@ -57,7 +55,6 @@
 
                 <script>
                 (function () {
-                    // Toggle visibilité mot de passe
                     const btn  = document.getElementById('togglePwd');
                     const pwd  = document.getElementById('password');
                     const icon = document.getElementById('eyeIcon');
@@ -68,7 +65,6 @@
                             icon.className = shown ? 'bi bi-eye' : 'bi bi-eye-slash';
                         });
                     }
-                    // Indicateur de chargement à la soumission
                     document.getElementById('loginForm').addEventListener('submit', function () {
                         document.getElementById('btnText').textContent    = 'Connexion…';
                         document.getElementById('btnSpinner').classList.remove('d-none');
@@ -89,3 +85,4 @@
 
     </div>
 </div>
+

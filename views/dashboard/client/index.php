@@ -15,10 +15,10 @@ function clientDays(string $start, string $end): int {
 </div>
 
 <?php if (!empty($error)): ?>
-    <div class="alert alert-danger"><?= Security::e((string) $error) ?></div>
+    <div class="alert alert-danger"><?= ((string) $error) ?></div>
 <?php endif; ?>
 <?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= Security::e((string) $success) ?></div>
+    <div class="alert alert-success"><?= ((string) $success) ?></div>
 <?php endif; ?>
 
 <div class="row g-3 mb-4">
@@ -66,8 +66,8 @@ function clientDays(string $start, string $end): int {
                 <?php foreach ($upcoming as $r): ?>
                     <tr>
                         <td>
-                            <strong><?= Security::e($r['title']) ?></strong><br>
-                            <small class="text-muted"><?= Security::e($r['brand']) ?> <?= Security::e($r['model']) ?></small>
+                            <strong><?= ($r['title']) ?></strong><br>
+                            <small class="text-muted"><?= ($r['brand']) ?> <?= ($r['model']) ?></small>
                         </td>
                         <td>
                             <?= clientDate($r['start_date']) ?> -> <?= clientDate($r['end_date']) ?><br>
@@ -76,7 +76,6 @@ function clientDays(string $start, string $end): int {
                         <td class="text-end fw-bold"><?= number_format((float) $r['total_price'], 2, ',', ' ') ?> €</td>
                         <td class="text-end">
                             <form method="POST" action="<?= APP_URL ?>/reservations/<?= (int) $r['id'] ?>/cancel" onsubmit="return confirm('Annuler cette reservation ?')">
-                                <?= Security::csrfField() ?>
                                 <button type="submit" class="btn btn-outline-danger btn-sm">Annuler</button>
                             </form>
                         </td>
@@ -104,8 +103,8 @@ function clientDays(string $start, string $end): int {
                 <?php foreach ($ongoing as $r): ?>
                     <tr>
                         <td>
-                            <strong><?= Security::e($r['title']) ?></strong><br>
-                            <small class="text-muted"><?= Security::e($r['brand']) ?> <?= Security::e($r['model']) ?></small>
+                            <strong><?= ($r['title']) ?></strong><br>
+                            <small class="text-muted"><?= ($r['brand']) ?> <?= ($r['model']) ?></small>
                         </td>
                         <td><?= clientDate($r['start_date']) ?> -> <?= clientDate($r['end_date']) ?></td>
                         <td class="text-end fw-bold"><?= number_format((float) $r['total_price'], 2, ',', ' ') ?> €</td>
@@ -133,7 +132,7 @@ function clientDays(string $start, string $end): int {
             <tbody>
                 <?php foreach ($past as $r): ?>
                     <tr>
-                        <td><?= Security::e($r['title']) ?></td>
+                        <td><?= ($r['title']) ?></td>
                         <td><?= clientDate($r['start_date']) ?> -> <?= clientDate($r['end_date']) ?></td>
                         <td class="text-center">
                             <?php if (($r['status'] ?? '') === 'cancelled'): ?>
@@ -149,3 +148,4 @@ function clientDays(string $start, string $end): int {
         </table>
     </div>
 <?php endif; ?>
+

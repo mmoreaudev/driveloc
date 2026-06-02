@@ -7,8 +7,6 @@ class OwnerController extends Controller
 {
     public function reservations(): void
     {
-        Security::requireRole('owner', 'admin');
-
         $reservations = (new Reservation())->findByOwner(Session::userId());
 
         $this->render('dashboard/owner/reservations', [

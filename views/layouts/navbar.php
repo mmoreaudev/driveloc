@@ -2,12 +2,10 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
     <div class="container">
-        <!-- Brand -->
         <a class="navbar-brand fw-bold fs-4" href="<?= APP_URL ?>">
             <i class="bi bi-car-front-fill me-2 text-warning"></i>DriveLoc
         </a>
 
-        <!-- Toggler mobile -->
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navMain"
                 aria-controls="navMain" aria-expanded="false" aria-label="Menu">
@@ -15,7 +13,6 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navMain">
-            <!-- Liens gauche -->
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="<?= APP_URL ?>/vehicles">
@@ -24,11 +21,9 @@
                 </li>
             </ul>
 
-            <!-- Liens droite -->
             <ul class="navbar-nav align-items-lg-center gap-1">
                 <?php if (Session::isLoggedIn()): ?>
 
-                    <!-- Dashboard selon le rôle -->
                     <?php if (Session::userRole() === 'owner' || Session::userRole() === 'admin'): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= APP_URL ?>/vehicles/create">
@@ -41,7 +36,7 @@
                         <a class="nav-link dropdown-toggle d-flex align-items-center gap-1"
                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle"></i>
-                            <?= Security::e(Session::userFirstname()) ?>
+                            <?= (Session::userFirstname()) ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
@@ -101,3 +96,4 @@
         </div>
     </div>
 </nav>
+

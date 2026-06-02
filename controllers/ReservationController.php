@@ -7,9 +7,6 @@ class ReservationController extends Controller
 {
     public function create(): void
     {
-        Security::requireRole('client', 'owner', 'admin');
-        Security::verifyCsrf();
-
         $vehicleId = (int) ($_POST['vehicle_id'] ?? 0);
         $startDate = trim($_POST['start_date']   ?? '');
         $endDate   = trim($_POST['end_date']     ?? '');
@@ -27,9 +24,6 @@ class ReservationController extends Controller
 
     public function cancel(string $id): void
     {
-        Security::requireRole('client', 'owner', 'admin');
-        Security::verifyCsrf();
-
         $reservationId = (int) $id;
         $success       = (new ReservationService())->cancelReservation($reservationId, (int) Session::userId());
 

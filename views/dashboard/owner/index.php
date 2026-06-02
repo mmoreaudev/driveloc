@@ -25,10 +25,10 @@ function ownerStatusLabel(string $status): string {
 </div>
 
 <?php if (!empty($error)): ?>
-    <div class="alert alert-danger"><?= Security::e((string) $error) ?></div>
+    <div class="alert alert-danger"><?= ((string) $error) ?></div>
 <?php endif; ?>
 <?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= Security::e((string) $success) ?></div>
+    <div class="alert alert-success"><?= ((string) $success) ?></div>
 <?php endif; ?>
 
 <div class="row g-3 mb-4">
@@ -50,8 +50,8 @@ function ownerStatusLabel(string $status): string {
             <tbody>
                 <?php foreach ($vehicles as $v): ?>
                     <tr>
-                        <td><strong><?= Security::e($v['title']) ?></strong><br><small class="text-muted"><?= Security::e($v['brand']) ?> <?= Security::e($v['model']) ?> - <?= Security::e($v['registration']) ?></small></td>
-                        <td><?= Security::e($v['category_name']) ?></td>
+                        <td><strong><?= ($v['title']) ?></strong><br><small class="text-muted"><?= ($v['brand']) ?> <?= ($v['model']) ?> - <?= ($v['registration']) ?></small></td>
+                        <td><?= ($v['category_name']) ?></td>
                         <td class="text-end fw-bold"><?= number_format((float) $v['price_per_day'], 2, ',', ' ') ?> €</td>
                         <td><?php if (($v['status'] ?? '') === 'active'): ?><span class="badge bg-success">Actif</span><?php else: ?><span class="badge bg-secondary">Inactif</span><?php endif; ?></td>
                         <td class="text-end"><a href="<?= APP_URL ?>/vehicles/<?= (int) $v['id'] ?>" class="btn btn-sm btn-outline-secondary">Voir</a> <a href="<?= APP_URL ?>/vehicles/<?= (int) $v['id'] ?>/edit" class="btn btn-sm btn-outline-dark">Modifier</a></td>
@@ -75,10 +75,10 @@ function ownerStatusLabel(string $status): string {
             <tbody>
                 <?php foreach ($allRes as $r): ?>
                     <tr>
-                        <td><?= Security::e($r['client_firstname']) ?> <?= Security::e($r['client_lastname']) ?></td>
-                        <td><?= Security::e($r['vehicle_title']) ?></td>
+                        <td><?= ($r['client_firstname']) ?> <?= ($r['client_lastname']) ?></td>
+                        <td><?= ($r['vehicle_title']) ?></td>
                         <td><?= ownerDate($r['start_date']) ?> -> <?= ownerDate($r['end_date']) ?><br><small class="text-muted"><?= ownerDays($r['start_date'], $r['end_date']) ?> jour(s)</small></td>
-                        <td class="text-center"><span class="badge bg-secondary"><?= Security::e(ownerStatusLabel((string) $r['status'])) ?></span></td>
+                        <td class="text-center"><span class="badge bg-secondary"><?= (ownerStatusLabel((string) $r['status'])) ?></span></td>
                         <td class="text-end fw-bold"><?= number_format((float) $r['total_price'], 2, ',', ' ') ?> €</td>
                     </tr>
                 <?php endforeach; ?>
@@ -86,3 +86,4 @@ function ownerStatusLabel(string $status): string {
         </table>
     </div>
 <?php endif; ?>
+

@@ -6,10 +6,10 @@
 </div>
 
 <?php if (!empty($error)): ?>
-    <div class="alert alert-danger"><?= Security::e((string) $error) ?></div>
+    <div class="alert alert-danger"><?= ((string) $error) ?></div>
 <?php endif; ?>
 <?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= Security::e((string) $success) ?></div>
+    <div class="alert alert-success"><?= ((string) $success) ?></div>
 <?php endif; ?>
 
 <div class="table-responsive">
@@ -21,18 +21,16 @@
             <?php foreach ($users as $u): ?>
                 <tr>
                     <td><?= (int) $u['id'] ?></td>
-                    <td><?= Security::e($u['firstname']) ?> <?= Security::e($u['lastname']) ?></td>
-                    <td><?= Security::e($u['email']) ?></td>
-                    <td><span class="badge bg-secondary"><?= Security::e($u['role']) ?></span></td>
+                    <td><?= ($u['firstname']) ?> <?= ($u['lastname']) ?></td>
+                    <td><?= ($u['email']) ?></td>
+                    <td><span class="badge bg-secondary"><?= ($u['role']) ?></span></td>
                     <td><?php if (($u['status'] ?? '') === 'active'): ?><span class="badge bg-success">Actif</span><?php else: ?><span class="badge bg-secondary">Inactif</span><?php endif; ?></td>
                     <td class="text-end">
                         <?php if (($u['role'] ?? '') !== 'admin'): ?>
                             <form method="POST" action="<?= APP_URL ?>/dashboard/admin/users/<?= (int) $u['id'] ?>/toggle" class="d-inline">
-                                <?= Security::csrfField() ?>
                                 <button type="submit" class="btn btn-sm btn-outline-warning">Activer / Desactiver</button>
                             </form>
                             <form method="POST" action="<?= APP_URL ?>/dashboard/admin/users/<?= (int) $u['id'] ?>/delete" class="d-inline" onsubmit="return confirm('Supprimer cet utilisateur ?')">
-                                <?= Security::csrfField() ?>
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
                             </form>
                         <?php endif; ?>
@@ -42,3 +40,4 @@
         </tbody>
     </table>
 </div>
+

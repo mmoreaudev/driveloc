@@ -12,14 +12,12 @@
 
                 <?php if ($error): ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i><?= Security::e($error) ?>
+                        <i class="bi bi-exclamation-triangle me-2"></i><?= ($error) ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
 
                 <form method="POST" action="<?= APP_URL ?>/register" novalidate>
-                    <?= Security::csrfField() ?>
-
                     <div class="row g-3">
 
                         <div class="col-sm-6">
@@ -133,3 +131,4 @@
 
     </div>
 </div>
+

@@ -10,15 +10,14 @@
 </div>
 
 <?php if ($error): ?>
-    <div class="alert alert-danger"><?= Security::e($error) ?></div>
+    <div class="alert alert-danger"><?= ($error) ?></div>
 <?php endif; ?>
 <?php if ($success): ?>
-    <div class="alert alert-success"><?= Security::e($success) ?></div>
+    <div class="alert alert-success"><?= ($success) ?></div>
 <?php endif; ?>
 
 <div class="row g-4">
 
-    <!-- Liste -->
     <div class="col-md-7">
         <div class="card border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body">
@@ -26,7 +25,7 @@
                 <ul class="list-group list-group-flush">
                     <?php foreach ($categories as $cat): ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-tag me-2 text-muted"></i><?= Security::e($cat['name']) ?></span>
+                            <span><i class="bi bi-tag me-2 text-muted"></i><?= ($cat['name']) ?></span>
                             <span class="badge bg-secondary">#<?= $cat['id'] ?></span>
                         </li>
                     <?php endforeach; ?>
@@ -35,13 +34,11 @@
         </div>
     </div>
 
-    <!-- Formulaire ajout -->
     <div class="col-md-5">
         <div class="card border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body">
                 <h2 class="h6 fw-bold mb-3">Ajouter une catégorie</h2>
                 <form method="POST" action="<?= APP_URL ?>/dashboard/admin/categories/create">
-                    <?= Security::csrfField() ?>
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-semibold">Nom de la catégorie</label>
                         <input type="text" id="name" name="name"
@@ -57,3 +54,4 @@
     </div>
 
 </div>
+

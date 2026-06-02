@@ -1,19 +1,8 @@
--- ==============================================================
--- DriveLoc – Script SQL complet
--- Compatible : MySQL 8 / phpMyAdmin
--- Encodage   : utf8mb4
--- ==============================================================
-
 SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE = 'STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO';
 SET NAMES utf8mb4;
 
 
-
--- ==============================================================
--- TABLE : categories
--- Référentiel des types de véhicules
--- ==============================================================
 CREATE TABLE categories (
     id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name       VARCHAR(100) NOT NULL,
@@ -26,10 +15,6 @@ CREATE TABLE categories (
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Catégories de véhicules disponibles sur la plateforme';
 
--- ==============================================================
--- TABLE : users
--- Tous les comptes (clients, propriétaires, administrateurs)
--- ==============================================================
 CREATE TABLE users (
     id         INT UNSIGNED                          NOT NULL AUTO_INCREMENT,
     firstname  VARCHAR(100)                          NOT NULL,
@@ -47,10 +32,7 @@ CREATE TABLE users (
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Comptes utilisateurs – rôles : client, owner, admin';
 
--- ==============================================================
--- TABLE : vehicles
--- Véhicules publiés par les propriétaires
--- ==============================================================
+
 CREATE TABLE vehicles (
     id             INT UNSIGNED                  NOT NULL AUTO_INCREMENT,
     owner_id       INT UNSIGNED                  NOT NULL COMMENT 'FK → users.id (rôle owner)',
@@ -79,10 +61,6 @@ CREATE TABLE vehicles (
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Annonces de véhicules à louer';
 
--- ==============================================================
--- TABLE : vehicle_images
--- Photos supplémentaires (galerie) liées à un véhicule
--- ==============================================================
 CREATE TABLE vehicle_images (
     id          INT UNSIGNED         NOT NULL AUTO_INCREMENT,
     vehicle_id  INT UNSIGNED         NOT NULL COMMENT 'FK → vehicles.id',
@@ -100,10 +78,6 @@ CREATE TABLE vehicle_images (
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Images supplémentaires des véhicules (galerie)';
 
--- ==============================================================
--- TABLE : reservations
--- Réservations effectuées par les clients
--- ==============================================================
 CREATE TABLE reservations (
     id          INT UNSIGNED                                        NOT NULL AUTO_INCREMENT,
     vehicle_id  INT UNSIGNED                                        NOT NULL COMMENT 'FK → vehicles.id',
@@ -128,21 +102,6 @@ CREATE TABLE reservations (
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Réservations de véhicules';
 
--- ==============================================================
--- INDEX DE RECHERCHE
--- ==============================================================
-
--- En hebergement mutualise avec quota disque strict, la creation d'index
--- secondaires peut echouer avec #1114 "table is full".
--- Les index ci-dessous sont volontairement omis pour garantir l'import.
--- L'application restera fonctionnelle avec des performances moindres.
--- A activer plus tard si l'hebergeur fournit plus d'espace.
-
--- ==============================================================
--- DONNÉES INITIALES
--- ==============================================================
-
--- Catégories par défaut
 INSERT INTO categories (name) VALUES
     ('Citadine'),
     ('Berline'),
@@ -151,25 +110,13 @@ INSERT INTO categories (name) VALUES
     ('Moto'),
     ('Vélo électrique');
 
--- Compte administrateur par défaut
--- Mot de passe : Admin1234!
--- Hash généré via : password_hash('Admin1234!', PASSWORD_BCRYPT, ['cost' => 12])
--- /!\ Changer le mot de passe dès la première connexion
 INSERT INTO users (firstname, lastname, email, password, role, status) VALUES
     (
         'Admin',
         'DriveLoc',
         'admin@driveloc.fr',
-        '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+        '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- Admin1234!
         'admin',
         'active'
     );
-
--- ==============================================================
--- RÉACTIVATION DES CONTRAINTES
--- ==============================================================
 SET FOREIGN_KEY_CHECKS = 1;
-
--- ==============================================================
--- FIN DU SCRIPT
--- ==============================================================

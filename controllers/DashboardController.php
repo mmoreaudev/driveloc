@@ -8,8 +8,6 @@ class DashboardController extends Controller
 {
     public function client(): void
     {
-        Security::requireRole('client', 'owner', 'admin');
-
         $reservationModel = new Reservation();
         $reservations     = $reservationModel->findByClient(Session::userId());
         $stats            = $reservationModel->statsForClient(Session::userId());
@@ -32,8 +30,6 @@ class DashboardController extends Controller
 
     public function owner(): void
     {
-        Security::requireRole('owner', 'admin');
-
         $ownerId          = Session::userId();
         $reservationModel = new Reservation();
         $vehicleModel     = new Vehicle();

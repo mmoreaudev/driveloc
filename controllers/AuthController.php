@@ -7,8 +7,6 @@ class AuthController extends Controller
 {
     public function loginForm(): void
     {
-        Security::requireGuest();
-
         $this->render('auth/login', [
             'pageTitle' => 'Connexion – ' . APP_NAME,
             'error'     => Session::getFlash('error'),
@@ -18,8 +16,6 @@ class AuthController extends Controller
 
     public function login(): void
     {
-        Security::verifyCsrf();
-
         $email    = trim($_POST['email']    ?? '');
         $password = $_POST['password']      ?? '';
 
@@ -27,10 +23,6 @@ class AuthController extends Controller
             Session::flash('error', 'Tous les champs sont obligatoires.');
             $this->redirect('/login');
         }
-
-        // Protection brute-force
-        $rateLimitKey = 'login:' . $email . ':' . ($_SERVER['REMOTE_ADDR'] ?? '');
-        Security::checkRateLimit($rateLimitKey, 5, 300);
 
         $userModel = new User();
         $user      = $userModel->findByEmail($email);
@@ -53,20 +45,15 @@ class AuthController extends Controller
         Session::set('user_lastname',  $user['lastname']);
         Session::set('user_status',    $user['status']);
 
-        Security::clearRateLimit('login:' . $email);
-
-        // Redirection sécurisée vers la page initialement demandée
         $fallback = '/dashboard/' . $user['role'];
         $stored   = Session::get('_redirect_after_login', $fallback);
         Session::remove('_redirect_after_login');
-        $this->redirect(Security::safeRedirect($stored, $fallback));
+        $this->redirect($stored !== '' ? $stored : $fallback);
     }
 
 
     public function registerForm(): void
     {
-        Security::requireGuest();
-
         $this->render('auth/register', [
             'pageTitle' => 'Inscription – ' . APP_NAME,
             'error'     => Session::getFlash('error'),
@@ -76,8 +63,6 @@ class AuthController extends Controller
 
     public function register(): void
     {
-        Security::verifyCsrf();
-
         $firstname = trim($_POST['firstname']        ?? '');
         $lastname  = trim($_POST['lastname']         ?? '');
         $email     = trim($_POST['email']            ?? '');
@@ -145,8 +130,6 @@ class AuthController extends Controller
 
     public function profileForm(): void
     {
-        Security::requireLogin();
-
         $user = (new User())->findById(Session::userId());
 
         $this->render('auth/profile', [
@@ -161,9 +144,6 @@ class AuthController extends Controller
 
     public function updateProfile(): void
     {
-        Security::requireLogin();
-        Security::verifyCsrf();
-
         $firstname = trim($_POST['firstname'] ?? '');
         $lastname  = trim($_POST['lastname']  ?? '');
         $email     = trim($_POST['email']     ?? '');
@@ -196,9 +176,6 @@ class AuthController extends Controller
 
     public function changePassword(): void
     {
-        Security::requireLogin();
-        Security::verifyCsrf();
-
         $current = $_POST['current_password'] ?? '';
         $new     = $_POST['new_password']     ?? '';
         $confirm = $_POST['confirm_password'] ?? '';

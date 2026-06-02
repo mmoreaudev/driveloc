@@ -27,12 +27,12 @@
                 <?php foreach ($reservations as $r): ?>
                     <tr>
                         <td>
-                            <?= Security::e($r['client_firstname']) ?>
-                            <?= Security::e($r['client_lastname']) ?>
+                            <?= ($r['client_firstname']) ?>
+                            <?= ($r['client_lastname']) ?>
                         </td>
-                        <td><?= Security::e($r['title']) ?></td>
+                        <td><?= ($r['title']) ?></td>
                         <td class="small">
-                            <?= Security::e($r['start_date']) ?> → <?= Security::e($r['end_date']) ?>
+                            <?= ($r['start_date']) ?> → <?= ($r['end_date']) ?>
                         </td>
                         <td class="fw-bold">
                             <?= number_format((float)$r['total_price'], 2, ',', ' ') ?> €
@@ -53,3 +53,4 @@
         </table>
     </div>
 <?php endif; ?>
+

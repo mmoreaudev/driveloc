@@ -5,7 +5,6 @@ require_once ROOT_PATH . '/core/Model.php';
 
 class Vehicle extends Model
 {
-    // Recherche avec NOT EXISTS pour meilleures performances
     public function search(array $filters = []): array
     {
         $sql = '

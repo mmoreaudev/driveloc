@@ -19,7 +19,7 @@
         <?php if (!empty($maintenanceMessage)): ?>
             <div class="alert alert-warning text-start">
                 <strong>Details:</strong><br>
-                <?= Security::e((string) $maintenanceMessage) ?>
+                <?= ((string) $maintenanceMessage) ?>
             </div>
         <?php endif; ?>
 
@@ -29,3 +29,4 @@
     </div>
 </body>
 </html>
+

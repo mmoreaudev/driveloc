@@ -7,7 +7,6 @@
             <i class="bi bi-person-circle me-2 text-warning"></i>Mon profil
         </h1>
 
-        <!-- Badge rôle -->
         <div class="mb-4">
             <?php
             $roleMeta = [
@@ -28,7 +27,6 @@
 
         <div class="row g-4">
 
-            <!-- ══ BLOC 1 : Informations personnelles ══ -->
             <div class="col-md-6">
                 <div class="card border-0 h-100" style="box-shadow: 2px 2px 4px 1px #252525;">
                     <div class="card-header bg-dark text-white fw-semibold">
@@ -38,40 +36,38 @@
 
                         <?php if ($error): ?>
                             <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
-                                <i class="bi bi-exclamation-triangle me-1"></i><?= Security::e($error) ?>
+                                <i class="bi bi-exclamation-triangle me-1"></i><?= ($error) ?>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         <?php endif; ?>
 
                         <?php if ($success): ?>
                             <div class="alert alert-success alert-dismissible fade show py-2" role="alert">
-                                <i class="bi bi-check-circle me-1"></i><?= Security::e($success) ?>
+                                <i class="bi bi-check-circle me-1"></i><?= ($success) ?>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         <?php endif; ?>
 
                         <form method="POST" action="<?= APP_URL ?>/profile" novalidate>
-                            <?= Security::csrfField() ?>
-
                             <div class="mb-3">
                                 <label for="firstname" class="form-label fw-semibold small">Prénom</label>
                                 <input type="text" id="firstname" name="firstname"
                                        class="form-control" required
-                                       value="<?= Security::e($user['firstname'] ?? '') ?>">
+                                       value="<?= ($user['firstname'] ?? '') ?>">
                             </div>
 
                             <div class="mb-3">
                                 <label for="lastname" class="form-label fw-semibold small">Nom</label>
                                 <input type="text" id="lastname" name="lastname"
                                        class="form-control" required
-                                       value="<?= Security::e($user['lastname'] ?? '') ?>">
+                                       value="<?= ($user['lastname'] ?? '') ?>">
                             </div>
 
                             <div class="mb-4">
                                 <label for="email" class="form-label fw-semibold small">Adresse email</label>
                                 <input type="email" id="email" name="email"
                                        class="form-control" required
-                                       value="<?= Security::e($user['email'] ?? '') ?>">
+                                       value="<?= ($user['email'] ?? '') ?>">
                             </div>
 
                             <button type="submit" class="btn btn-dark w-100 fw-semibold">
@@ -81,14 +77,13 @@
 
                         <div class="mt-3 pt-3 border-top text-muted small">
                             <i class="bi bi-calendar me-1"></i>
-                            Membre depuis le <?= Security::e(date('d/m/Y', strtotime($user['created_at'] ?? 'now'))) ?>
+                            Membre depuis le <?= (date('d/m/Y', strtotime($user['created_at'] ?? 'now'))) ?>
                         </div>
 
                     </div>
                 </div>
             </div>
 
-            <!-- ══ BLOC 2 : Changer le mot de passe ══ -->
             <div class="col-md-6">
                 <div class="card border-0 h-100" style="box-shadow: 2px 2px 4px 1px #252525;">
                     <div class="card-header bg-dark text-white fw-semibold">
@@ -98,22 +93,20 @@
 
                         <?php if ($errorPwd): ?>
                             <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
-                                <i class="bi bi-exclamation-triangle me-1"></i><?= Security::e($errorPwd) ?>
+                                <i class="bi bi-exclamation-triangle me-1"></i><?= ($errorPwd) ?>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         <?php endif; ?>
 
                         <?php if ($successPwd): ?>
                             <div class="alert alert-success alert-dismissible fade show py-2" role="alert">
-                                <i class="bi bi-check-circle me-1"></i><?= Security::e($successPwd) ?>
+                                <i class="bi bi-check-circle me-1"></i><?= ($successPwd) ?>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         <?php endif; ?>
 
                         <form method="POST" action="<?= APP_URL ?>/profile/password" novalidate
                               id="pwdForm">
-                            <?= Security::csrfField() ?>
-
                             <div class="mb-3">
                                 <label for="current_password" class="form-label fw-semibold small">
                                     Mot de passe actuel
@@ -139,7 +132,6 @@
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </div>
-                                <!-- Barre de force -->
                                 <div class="progress mt-1" style="height:4px">
                                     <div id="newPwdBar" class="progress-bar" style="width:0%"></div>
                                 </div>
@@ -155,7 +147,6 @@
                                 <div id="confirmLabel" class="form-text"></div>
                             </div>
 
-                            <!-- Règles de complexité -->
                             <ul class="list-unstyled small text-muted mb-3" id="pwdRules">
                                 <li id="rule-len"><i class="bi bi-x-circle text-danger me-1"></i>Au moins 8 caractères</li>
                                 <li id="rule-upper"><i class="bi bi-x-circle text-danger me-1"></i>Au moins une majuscule</li>
@@ -171,12 +162,12 @@
                 </div>
             </div>
 
-        </div><!-- /.row -->
-    </div><!-- /.col -->
-</div><!-- /.row -->
+        </div>
+    </div>
+</div>
 
 <div class="mt-3">
-    <a href="<?= APP_URL ?>/dashboard/<?= Security::e(Session::userRole()) ?>"
+    <a href="<?= APP_URL ?>/dashboard/<?= (Session::userRole()) ?>"
        class="btn btn-link text-muted ps-0">
         <i class="bi bi-arrow-left me-1"></i>Retour au tableau de bord
     </a>
@@ -184,7 +175,6 @@
 
 <script>
 (function () {
-    // ── Toggle visibilité ─────────────────────────────
     document.querySelectorAll('.toggle-pwd').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const input = this.previousElementSibling;
@@ -195,7 +185,6 @@
         });
     });
 
-    // ── Force du mot de passe ─────────────────────────
     const newPwd      = document.getElementById('new_password');
     const bar         = document.getElementById('newPwdBar');
     const barLabel    = document.getElementById('newPwdLabel');
@@ -238,7 +227,6 @@
         barLabel.textContent = this.value ? (labels[s] || '') : '';
         barLabel.className   = 'form-text ' + (s >= 4 ? 'text-success' : 'text-muted');
         updateRules(this.value);
-        // Re-vérifier la confirmation si déjà remplie
         if (confirmPwd.value) confirmPwd.dispatchEvent(new Event('input'));
     });
 
@@ -254,3 +242,4 @@
     });
 })();
 </script>
+

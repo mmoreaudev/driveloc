@@ -8,15 +8,13 @@
         </h1>
 
         <?php if ($error): ?>
-            <div class="alert alert-danger"><?= Security::e($error) ?></div>
+            <div class="alert alert-danger"><?= ($error) ?></div>
         <?php endif; ?>
 
         <div class="card border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body p-4">
 
                     <form method="POST" action="<?= APP_URL ?>/vehicles/create" novalidate>
-                    <?= Security::csrfField() ?>
-
                     <div class="row g-3">
 
                         <div class="col-12">
@@ -49,7 +47,7 @@
                                 <option value="">-- Choisir --</option>
                                 <?php foreach ($categories as $cat): ?>
                                     <option value="<?= $cat['id'] ?>">
-                                        <?= Security::e($cat['name']) ?>
+                                        <?= ($cat['name']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -91,3 +89,4 @@
 
     </div>
 </div>
+

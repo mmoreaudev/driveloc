@@ -5,7 +5,6 @@ require_once ROOT_PATH . '/core/Model.php';
 
 class Reservation extends Model
 {
-    // Utilise SELECT 1 pour court-circuiter dès le premier conflit
     public function isAvailable(int $vehicleId, string $startDate, string $endDate): bool
     {
         $row = $this->fetchOne("
@@ -74,11 +73,6 @@ class Reservation extends Model
         ', ['client_id' => $clientId]);
     }
 
-    /**
-     * Statistiques agrégées d'un client :
-     * - total dépensé (hors annulées)
-     * - nombre de réservations par statut
-     */
     public function statsForClient(int $clientId): array
     {
         $row = $this->fetchOne("
@@ -101,15 +95,6 @@ class Reservation extends Model
         ];
     }
 
-    /**
-     * Toutes les réservations reçues par un propriétaire.
-     * Triple jointure reservations ← vehicles ← users (client).
-     *
-     * Colonnes retournées :
-     *   r.*,
-     *   v.title, v.brand, v.model, v.registration, v.main_image, v.price_per_day,
-     *   u.firstname AS client_firstname, u.lastname AS client_lastname, u.email AS client_email
-     */
     public function findByOwner(int $ownerId): array
     {
         return $this->fetchAll("
@@ -139,9 +124,6 @@ class Reservation extends Model
         ", ['owner_id' => $ownerId]);
     }
 
-    /**
-     * Statistiques agrégées pour un propriétaire (hors annulées pour le CA).
-     */
     public function statsForOwner(int $ownerId): array
     {
         $row = $this->fetchOne("
@@ -167,12 +149,6 @@ class Reservation extends Model
         ];
     }
 
-    // ── Annulation ────────────────────────────────────
-
-    /**
-     * Annule une réservation. Seul le client propriétaire peut annuler
-     * et uniquement si la réservation est encore "à venir".
-     */
     public function cancel(int $id, int $clientId): bool
     {
         return $this->execute("
@@ -184,7 +160,6 @@ class Reservation extends Model
         ", ['id' => $id, 'client_id' => $clientId]);
     }
 
-    // ── Statistiques (admin) ──────────────────────────
 
     public function countByStatus(string $status): int
     {
@@ -204,13 +179,6 @@ class Reservation extends Model
         return (float) ($row['revenue'] ?? 0.0);
     }
 
-    /**
-     * Statistiques globales toutes réservations confondues.
-     * Une seule requête SQL pour le dashboard admin.
-     *
-     * revenue_theoretical : somme hors annulées (à venir + en cours + terminées)
-     * revenue_confirmed   : somme des réservations terminées uniquement
-     */
     public function globalStats(): array
     {
         $row = $this->fetchOne("
@@ -235,10 +203,6 @@ class Reservation extends Model
         ];
     }
 
-    /**
-     * Les N dernières réservations pour le fil d'activité du dashboard admin.
-     * Triple jointure : reservations + vehicles + users (client).
-     */
     public function recentForAdmin(int $limit = 10): array
     {
         return $this->fetchAll("

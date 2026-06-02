@@ -10,8 +10,6 @@ class AdminController extends Controller
 {
     public function index(): void
     {
-        Security::requireRole('admin');
-
         $reservationModel = new Reservation();
         $userModel        = new User();
         $vehicleModel     = new Vehicle();
@@ -30,8 +28,6 @@ class AdminController extends Controller
 
     public function users(): void
     {
-        Security::requireRole('admin');
-
         $this->render('dashboard/admin/users', [
             'pageTitle' => 'Gestion des utilisateurs – ' . APP_NAME,
             'users'     => (new User())->all(),
@@ -42,9 +38,6 @@ class AdminController extends Controller
 
     public function toggleUser(string $id): void
     {
-        Security::requireRole('admin');
-        Security::verifyCsrf();
-
         $userId    = (int) $id;
         $userModel = new User();
         $user      = $userModel->findById($userId);
@@ -63,9 +56,6 @@ class AdminController extends Controller
 
     public function deleteUser(string $id): void
     {
-        Security::requireRole('admin');
-        Security::verifyCsrf();
-
         $userId = (int) $id;
         $user   = (new User())->findById($userId);
 
@@ -83,8 +73,6 @@ class AdminController extends Controller
 
     public function vehicles(): void
     {
-        Security::requireRole('admin');
-
         $this->render('dashboard/admin/vehicles', [
             'pageTitle' => 'Gestion des véhicules – ' . APP_NAME,
             'vehicles'  => (new Vehicle())->allForAdmin(),
@@ -95,9 +83,6 @@ class AdminController extends Controller
 
     public function toggleVehicle(string $id): void
     {
-        Security::requireRole('admin');
-        Security::verifyCsrf();
-
         $vehicleId    = (int) $id;
         $vehicleModel = new Vehicle();
         $vehicle      = $vehicleModel->findById($vehicleId);
@@ -116,9 +101,6 @@ class AdminController extends Controller
 
     public function deleteVehicle(string $id): void
     {
-        Security::requireRole('admin');
-        Security::verifyCsrf();
-
         $vehicleId    = (int) $id;
         $vehicleModel = new Vehicle();
         $vehicle      = $vehicleModel->findById($vehicleId);
@@ -136,8 +118,6 @@ class AdminController extends Controller
                 $this->redirect('/dashboard/admin/vehicles');
             }
         } catch (PDOException $e) {
-            // Cas courant: des réservations référencent encore ce véhicule (FK RESTRICT).
-            // On bascule en inactif pour le retirer du catalogue sans casser l'historique.
             $vehicleModel->setStatus($vehicleId, 'inactive');
             Session::flash('error', 'Suppression impossible: ce véhicule est lié à des réservations. Il a été désactivé.');
             $this->redirect('/dashboard/admin/vehicles');
@@ -147,12 +127,9 @@ class AdminController extends Controller
         $this->redirect('/dashboard/admin/vehicles');
     }
 
-    // ── Catégories ────────────────────────────────────
 
     public function categories(): void
     {
-        Security::requireRole('admin');
-
         $this->render('dashboard/admin/categories', [
             'pageTitle'  => 'Gestion des catégories – ' . APP_NAME,
             'categories' => (new Category())->all(),
@@ -163,9 +140,6 @@ class AdminController extends Controller
 
     public function createCategory(): void
     {
-        Security::requireRole('admin');
-        Security::verifyCsrf();
-
         $name          = trim($_POST['name'] ?? '');
         $categoryModel = new Category();
 

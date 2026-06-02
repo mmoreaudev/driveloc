@@ -2,13 +2,12 @@
 
 <div class="row g-4">
 
-    <!-- Photo + infos -->
     <div class="col-lg-7">
         <?php if ($vehicle['main_image']): ?>
-            <img src="<?= Security::e($vehicle['main_image']) ?>"
+            <img src="<?= ($vehicle['main_image']) ?>"
                  class="img-fluid rounded w-100 object-fit-cover"
                  style="max-height:420px;box-shadow: 2px 2px 4px 1px #252525;"
-                 alt="<?= Security::e($vehicle['title']) ?>">
+                 alt="<?= ($vehicle['title']) ?>">
         <?php else: ?>
             <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
                  style="height:300px">
@@ -17,26 +16,25 @@
         <?php endif; ?>
     </div>
 
-    <!-- Détails + formulaire de réservation -->
     <div class="col-lg-5">
 
-        <span class="badge bg-warning text-dark mb-2"><?= Security::e($vehicle['category_name']) ?></span>
-        <h1 class="h3 fw-bold"><?= Security::e($vehicle['title']) ?></h1>
+        <span class="badge bg-warning text-dark mb-2"><?= ($vehicle['category_name']) ?></span>
+        <h1 class="h3 fw-bold"><?= ($vehicle['title']) ?></h1>
         <p class="text-muted mb-1">
             <i class="bi bi-person me-1"></i>
-            Proposé par <strong><?= Security::e($vehicle['firstname'] . ' ' . $vehicle['lastname']) ?></strong>
+            Proposé par <strong><?= ($vehicle['firstname'] . ' ' . $vehicle['lastname']) ?></strong>
         </p>
         <p class="text-muted mb-1">
             <i class="bi bi-car-front me-1"></i>
-            <?= Security::e($vehicle['brand']) ?> <?= Security::e($vehicle['model']) ?>
+            <?= ($vehicle['brand']) ?> <?= ($vehicle['model']) ?>
         </p>
         <p class="text-muted mb-3">
             <i class="bi bi-credit-card me-1"></i>
-            Immatriculation : <strong><?= Security::e($vehicle['registration']) ?></strong>
+            Immatriculation : <strong><?= ($vehicle['registration']) ?></strong>
         </p>
 
         <?php if ($vehicle['description']): ?>
-            <p class="mb-4"><?= Security::e($vehicle['description']) ?></p>
+            <p class="mb-4"><?= ($vehicle['description']) ?></p>
         <?php endif; ?>
 
         <div class="card bg-dark text-white border-0 shadow mb-4 p-3 text-center">
@@ -47,26 +45,21 @@
         </div>
 
         <?php if ($error): ?>
-            <div class="alert alert-danger"><?= Security::e($error) ?></div>
+            <div class="alert alert-danger"><?= ($error) ?></div>
         <?php endif; ?>
         <?php if ($success): ?>
-            <div class="alert alert-success"><?= Security::e($success) ?></div>
+            <div class="alert alert-success"><?= ($success) ?></div>
         <?php endif; ?>
 
-        <!-- Formulaire de réservation -->
         <?php if (Session::isLoggedIn()):
-            // Pré-remplissage depuis la recherche (GET passé par la fiche listing)
             $preStart = isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date'], ENT_QUOTES) : '';
             $preEnd   = isset($_GET['end_date'])   ? htmlspecialchars($_GET['end_date'],   ENT_QUOTES) : '';
-            // Périodes bloquées → JSON pour le JS
-            // JSON_HEX_* : échappe tous les caractères dangereux en contexte HTML inline
             $blockedJson = json_encode(
                 $blockedPeriods ?? [],
                 JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
             );
         ?>
             <form method="POST" action="<?= APP_URL ?>/reservations/create" id="formReservation">
-                <?= Security::csrfField() ?>
                 <input type="hidden" name="vehicle_id" value="<?= $vehicle['id'] ?>">
 
                 <div class="row g-2 mb-3">
@@ -86,13 +79,11 @@
                     </div>
                 </div>
 
-                <!-- Alerte conflit de disponibilité (JS) -->
                 <div id="conflictAlert" class="alert alert-danger small d-none">
                     <i class="bi bi-exclamation-triangle me-1"></i>
                     <span id="conflictText"></span>
                 </div>
 
-                <!-- Récapitulatif prix (JS) -->
                 <div id="priceSummary" class="alert alert-success border-0 small d-none">
                     <div class="d-flex justify-content-between align-items-center">
                         <span id="priceSummaryText"></span>
@@ -149,7 +140,6 @@
     const conflictText  = document.getElementById('conflictText');
     const btnReserve    = document.getElementById('btnReserve');
 
-    // ── Couplage des champs de dates ──────────────────
     startInput.addEventListener('change', function () {
         if (!this.value) return;
         const next = new Date(this.value);
@@ -160,10 +150,8 @@
     });
     endInput.addEventListener('change', update);
 
-    // ── Détection de conflit ──────────────────────────
     function overlaps(selStart, selEnd) {
         for (const p of blockedPeriods) {
-            // Chevauchement si : p.start < selEnd  AND  p.end > selStart
             if (p.start < selEnd && p.end > selStart) {
                 return { start: p.start, end: p.end };
             }
@@ -176,7 +164,6 @@
         return `${d}/${m}/${y}`;
     }
 
-    // ── Mise à jour de l'interface ────────────────────
     function update() {
         if (!startInput.value || !endInput.value) {
             summary.classList.add('d-none');
@@ -194,7 +181,6 @@
             return;
         }
 
-        // Vérification de chevauchement côté JS (doublon de la vérification serveur)
         const conflict = overlaps(start, end);
         if (conflict) {
             conflictText.textContent =
@@ -208,7 +194,6 @@
         conflictAlert.classList.add('d-none');
         btnReserve.disabled = false;
 
-        // Calcul du prix total
         const total = (pricePerDay * days).toFixed(2).replace('.', ',');
         summaryText.textContent =
             `${days} jour${days > 1 ? 's' : ''} × ${pricePerDay.toFixed(2).replace('.', ',')} € / jour`;
@@ -216,7 +201,7 @@
         summary.classList.remove('d-none');
     }
 
-    // Déclencher si les dates sont pré-remplies (depuis la recherche)
     if (startInput.value && endInput.value) update();
 })();
 </script>
+

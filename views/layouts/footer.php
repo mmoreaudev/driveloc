@@ -8,7 +8,7 @@
             <i class="bi bi-car-front-fill me-1"></i> DriveLoc
         </p>
         <small class="text-secondary">
-            &copy; <?= date('Y') ?> – <a href="<?= APP_URL ?>" class="text-secondary text-decoration-none fw-semibold">driveloc.onrender.com</a> par <a href="https://www.mateomoreau.com" class="text-secondary text-decoration-none fw-semibold" target="_blank" rel="noopener">MateoMoreau.com</a>>
+            &copy; <?= date('Y') ?> – <a href="<?= APP_URL ?>" class="text-secondary text-decoration-none fw-semibold">dd</a> par <a href="https://www.mateomoreau.com" class="text-secondary text-decoration-none fw-semibold" target="_blank" rel="noopener">MateoMoreau.com</a>>
         </small>
     </div>
 </footer>

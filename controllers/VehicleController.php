@@ -93,12 +93,11 @@ class VehicleController extends Controller
             return;
         }
 
-        // Périodes déjà réservées pour le JS
         $reservationModel = new Reservation();
         $blockedPeriods   = $reservationModel->getBlockedPeriods((int) $id);
 
         $this->render('vehicles/show', [
-            'pageTitle'      => Security::e($vehicle['title']) . ' – ' . APP_NAME,
+            'pageTitle'      => $vehicle['title'] . ' – ' . APP_NAME,
             'vehicle'        => $vehicle,
             'blockedPeriods' => $blockedPeriods,
             'error'          => Session::getFlash('error'),
@@ -109,8 +108,6 @@ class VehicleController extends Controller
 
     public function createForm(): void
     {
-        Security::requireRole('owner', 'admin');
-
         $this->render('vehicles/create', [
             'pageTitle'  => 'Ajouter un véhicule – ' . APP_NAME,
             'categories' => (new Category())->all(),
@@ -120,9 +117,6 @@ class VehicleController extends Controller
 
     public function create(): void
     {
-        Security::requireRole('owner', 'admin');
-        Security::verifyCsrf();
-
         $title        = trim($_POST['title']        ?? '');
         $brand        = trim($_POST['brand']        ?? '');
         $model        = trim($_POST['model']        ?? '');
@@ -179,8 +173,6 @@ class VehicleController extends Controller
 
     public function editForm(string $id): void
     {
-        Security::requireRole('owner', 'admin');
-
         $vehicle = $this->getOwnedVehicle((int) $id);
 
         $this->render('vehicles/edit', [
@@ -193,9 +185,6 @@ class VehicleController extends Controller
 
     public function edit(string $id): void
     {
-        Security::requireRole('owner', 'admin');
-        Security::verifyCsrf();
-
         $vehicle      = $this->getOwnedVehicle((int) $id);
         $vehicleModel = new Vehicle();
 
@@ -254,9 +243,6 @@ class VehicleController extends Controller
 
     public function delete(string $id): void
     {
-        Security::requireRole('owner', 'admin');
-        Security::verifyCsrf();
-
         $vehicle      = $this->getOwnedVehicle((int) $id);
         $vehicleModel = new Vehicle();
 
@@ -269,9 +255,6 @@ class VehicleController extends Controller
 
     public function toggleStatus(string $id): void
     {
-        Security::requireRole('owner', 'admin');
-        Security::verifyCsrf();
-
         $vehicle = $this->getOwnedVehicle((int) $id);
         $newStatus = $vehicle['status'] === 'active' ? 'inactive' : 'active';
 
@@ -282,12 +265,8 @@ class VehicleController extends Controller
         $this->redirect('/dashboard/owner');
     }
 
-    // ── Helpers privés ────────────────────────────────
 
-    /**
-     * Récupère un véhicule et vérifie que l'utilisateur en est le propriétaire.
-     * Les admins peuvent accéder à tous les véhicules.
-     */
+ 
     private function getOwnedVehicle(int $id): array
     {
         $vehicle = (new Vehicle())->findById($id);
@@ -295,15 +274,6 @@ class VehicleController extends Controller
         if (!$vehicle) {
             http_response_code(404);
             require VIEWS_PATH . '/errors/404.php';
-            exit;
-        }
-
-        if (
-            Session::userRole() !== 'admin'
-            && (int) $vehicle['owner_id'] !== Session::userId()
-        ) {
-            http_response_code(403);
-            require VIEWS_PATH . '/errors/403.php';
             exit;
         }
 
