@@ -6,15 +6,6 @@ body {
     letter-spacing: -0.5px;
 }
 
-.card {
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
-    transform: translateY(-2px);
-}
-
 .object-fit-cover {
     object-fit: cover;
 }
