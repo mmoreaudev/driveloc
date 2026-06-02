@@ -1,30 +1,73 @@
-/* =========================
-   BASE STYLE (SIXT INSPIRED)
-========================= */
 
-body {
-    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background-color: #ffffff;
-    color: #111;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+/* =========================================================
+   🧨 NIVEAU 1 — BOOTSTRAP HARD RESET (design system kill)
+   ========================================================= */
+
+:root {
+    --bs-border-radius: 0 !important;
+    --bs-border-radius-sm: 0 !important;
+    --bs-border-radius-lg: 0 !important;
+
+    --primary: #ff5f00;
+    --dark: #000;
+    --light: #fff;
 }
 
-/* =========================
-   NAVBAR
-========================= */
+/* kill all bootstrap rounding */
+* {
+    border-radius: 0 !important;
+}
 
+/* remove all default shadows */
+.shadow,
+.shadow-sm,
+.shadow-lg {
+    box-shadow: none !important;
+}
+
+/* kill bootstrap borders noise */
+.border {
+    border: none !important;
+}
+
+/* container tighter like premium brand site */
+.container,
+.container-fluid {
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+}
+
+/* muted text more premium */
+.text-muted {
+    color: #777 !important;
+}
+
+
+/* =========================================================
+   ⚙️ NIVEAU 2 — BOOTSTRAP COMPONENT OVERRIDE
+   (on garde bootstrap mais on le transforme complètement)
+   ========================================================= */
+
+/* BODY */
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: #fff;
+    color: #111;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* NAVBAR (Sixt-style black bar) */
 .navbar {
     background: #000 !important;
+    border-bottom: 3px solid #ff5f00;
     padding: 14px 0;
-    border-bottom: 2px solid #ff5f00;
 }
 
 .navbar-brand {
-    letter-spacing: -1px;
     font-weight: 900;
-    color: #fff !important;
+    letter-spacing: -1.5px;
     text-transform: uppercase;
+    color: #fff !important;
 }
 
 .navbar a {
@@ -37,41 +80,79 @@ body {
     color: #ff5f00 !important;
 }
 
-/* =========================
-   UTILITIES
-========================= */
-
-.object-fit-cover {
-    object-fit: cover;
-}
-
-.w-fit {
-    width: fit-content;
-}
-
-/* =========================
-   TYPOGRAPHY (SIXT STYLE)
-========================= */
-
-h1, h2, h3, h4, h5 {
-    letter-spacing: -1px;
+/* BUTTONS (conversion focused) */
+.btn {
+    border-radius: 0 !important;
     font-weight: 800;
-}
-
-.display-1, .display-2, .display-3 {
-    font-weight: 900;
-    letter-spacing: -2px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    padding: 10px 16px;
+    transition: 0.2s ease;
 }
 
-/* =========================
-   TABLES (CLEAN + PREMIUM)
-========================= */
-
-.table {
-    border-color: #eee;
+/* primary CTA Sixt */
+.btn-primary {
+    background: #ff5f00 !important;
+    border: none !important;
 }
 
+.btn-primary:hover {
+    background: #e65500 !important;
+    transform: translateY(-1px);
+}
+
+/* outline dark */
+.btn-outline-dark {
+    border: 2px solid #000 !important;
+}
+
+.btn-outline-dark:hover {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+/* CARDS (remove bootstrap identity completely) */
+.card {
+    border: none !important;
+    background: #fff;
+    box-shadow: none !important;
+    border-bottom: 1px solid #eee !important;
+    transition: 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    border-bottom-color: #ff5f00 !important;
+}
+
+.card-title {
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+
+/* images inside cards */
+.card img {
+    transition: 0.4s ease;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+/* FORMS (clean premium style) */
+.form-control {
+    border: none !important;
+    border-bottom: 2px solid #ddd !important;
+    padding: 10px 0;
+    background: transparent !important;
+}
+
+.form-control:focus {
+    border-bottom-color: #ff5f00 !important;
+    box-shadow: none !important;
+}
+
+/* TABLES */
 .table th {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -83,83 +164,40 @@ h1, h2, h3, h4, h5 {
     vertical-align: middle;
 }
 
-/* =========================
-   BUTTONS (SIXT CTA STYLE)
-========================= */
+/* LINKS */
+a {
+    text-decoration: none;
+    transition: 0.2s ease;
+}
 
-.btn {
-    border-radius: 2px;
-    font-weight: 700;
+a:hover {
+    color: #ff5f00 !important;
+}
+
+
+/* =========================================================
+   🎯 NIVEAU 3 — DESIGN SYSTEM SIXT-LIKE (BRAND LAYER)
+   ========================================================= */
+
+/* TYPOGRAPHY (marketing aggressive style) */
+h1, h2, h3, h4, h5 {
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.display-1,
+.display-2,
+.display-3 {
+    font-weight: 900;
+    letter-spacing: -2px;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    transition: all 0.2s ease;
-    padding: 10px 16px;
 }
 
-.btn-primary {
-    background: #ff5f00;
-    border: none;
-    color: #fff;
-}
-
-.btn-primary:hover {
-    background: #e65500;
-    transform: translateY(-1px);
-}
-
-.btn-outline-dark {
-    border: 2px solid #000;
-}
-
-.btn-outline-dark:hover {
-    background: #000;
-    color: #fff;
-}
-
-/* =========================
-   CARDS (LIFESTYLE / RENTAL STYLE)
-========================= */
-
-.card {
-    border: none;
-    border-radius: 0;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 45px rgba(0,0,0,0.12);
-}
-
-.card img {
-    transition: transform 0.4s ease;
-}
-
-.card:hover img {
-    transform: scale(1.05);
-}
-
-.card-title {
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-/* Icons */
-.card .bi {
-    line-height: 1;
-    color: #ff5f00;
-}
-
-/* =========================
-   HERO STYLE (IMPORTANT SIXT FEEL)
-========================= */
-
+/* HERO SECTION (key Sixt feeling) */
 .hero {
     background: #000;
     color: #fff;
-    padding: 80px 0;
+    padding: 90px 0;
     position: relative;
     overflow: hidden;
 }
@@ -168,13 +206,17 @@ h1, h2, h3, h4, h5 {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(0,0,0,0.8), rgba(0,0,0,0.3));
+    background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0.85),
+        rgba(0,0,0,0.35)
+    );
 }
 
 .hero h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 900;
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
     text-transform: uppercase;
+    font-weight: 900;
 }
 
 .hero p {
@@ -182,28 +224,17 @@ h1, h2, h3, h4, h5 {
     font-size: 1.1rem;
 }
 
-/* =========================
-   LINKS
-========================= */
-
-a {
-    text-decoration: none;
-    transition: 0.2s ease;
+/* CARDS LAYOUT FEEL */
+.card {
+    overflow: hidden;
 }
 
-a:hover {
-    color: #ff5f00;
-}
-
-/* =========================
-   FOOTER (SIXT STYLE)
-========================= */
-
+/* FOOTER (strong brand block) */
 footer {
     background: #000;
     color: #fff;
     border-top: 3px solid #ff5f00;
-    padding: 40px 0;
+    padding: 50px 0;
 }
 
 footer a {
@@ -214,24 +245,16 @@ footer a:hover {
     color: #ff5f00;
 }
 
-/* =========================
-   FORMS
-========================= */
-
-input, select, textarea {
-    border-radius: 2px !important;
-    border: 1px solid #ddd !important;
-    padding: 10px 12px;
+/* ICONS */
+.bi {
+    color: #ff5f00;
+    line-height: 1;
 }
 
-input:focus, select:focus, textarea:focus {
-    border-color: #ff5f00 !important;
-    box-shadow: 0 0 0 0.2rem rgba(255,95,0,0.15) !important;
-}
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* =========================================================
+   📱 RESPONSIVE POLISH
+   ========================================================= */
 
 @media (max-width: 576px) {
     .card-img-top {
@@ -239,6 +262,10 @@ input:focus, select:focus, textarea:focus {
     }
 
     .hero {
-        padding: 50px 20px;
+        padding: 60px 20px;
+    }
+
+    .navbar {
+        padding: 10px 0;
     }
 }
