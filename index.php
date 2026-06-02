@@ -75,7 +75,7 @@ header(
     . "default-src 'self'; "
     . "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
     . "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
-    . "img-src 'self' data: blob:; "
+    . "img-src 'self' https: data: blob:; "
     . "font-src 'self' https://cdn.jsdelivr.net; "
     . "connect-src 'self'; "
     . "frame-ancestors 'none';"
