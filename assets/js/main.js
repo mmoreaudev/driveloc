@@ -25,22 +25,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Prévisualisation d'image avant upload ──────────────
-    document.querySelectorAll('input[type="file"][accept^="image"]').forEach(function (input) {
-        input.addEventListener('change', function () {
-            const file = this.files[0];
-            if (!file) return;
-
-            const existingPreview = this.parentElement.querySelector('.js-img-preview');
+    // ── Prévisualisation d'image depuis URL ─────────────────
+    document.querySelectorAll('input[type="url"][name="main_image"]').forEach(function (input) {
+        const showPreview = function () {
+            const value = input.value.trim();
+            const existingPreview = input.parentElement.querySelector('.js-img-preview');
             if (existingPreview) existingPreview.remove();
 
+            if (!value || (!value.startsWith('http://') && !value.startsWith('https://'))) {
+                return;
+            }
+
             const img = document.createElement('img');
-            img.className  = 'img-thumbnail mt-2 js-img-preview';
+            img.className = 'img-thumbnail mt-2 js-img-preview';
             img.style.height = '80px';
-            img.src        = URL.createObjectURL(file);
-            img.onload     = () => URL.revokeObjectURL(img.src);
-            this.parentElement.appendChild(img);
-        });
+            img.src = value;
+            img.alt = 'Prévisualisation image';
+            img.onerror = function () { img.remove(); };
+            input.parentElement.appendChild(img);
+        };
+
+        input.addEventListener('input', showPreview);
+        showPreview();
     });
 
 });

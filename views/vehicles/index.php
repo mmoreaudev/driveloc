@@ -174,7 +174,7 @@ function fmt(string $d): string {
                 <div class="card h-100 shadow-sm border-0">
 
                     <?php if ($v['main_image']): ?>
-                        <img src="<?= UPLOAD_URL . Security::e($v['main_image']) ?>"
+                        <img src="<?= Security::e($v['main_image']) ?>"
                              class="card-img-top object-fit-cover" style="height:200px"
                              alt="<?= Security::e($v['title']) ?>">
                     <?php else: ?>

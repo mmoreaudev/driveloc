@@ -15,9 +15,8 @@
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
 
-                <form method="POST"
-                      action="<?= APP_URL ?>/vehicles/<?= $vehicle['id'] ?>/edit"
-                      enctype="multipart/form-data" novalidate>
+                    <form method="POST"
+                        action="<?= APP_URL ?>/vehicles/<?= $vehicle['id'] ?>/edit" novalidate>
                     <?= Security::csrfField() ?>
 
                     <div class="row g-3">
@@ -70,17 +69,19 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="main_image" class="form-label fw-semibold">Changer la photo</label>
+                            <label for="main_image" class="form-label fw-semibold">Lien de l'image principale</label>
                             <?php if ($vehicle['main_image']): ?>
                                 <div class="mb-2">
-                                    <img src="<?= UPLOAD_URL . Security::e($vehicle['main_image']) ?>"
+                                    <img src="<?= Security::e($vehicle['main_image']) ?>"
                                          class="img-thumbnail" style="height:80px" alt="Photo actuelle">
                                     <small class="text-muted d-block">Photo actuelle</small>
                                 </div>
                             <?php endif; ?>
-                            <input type="file" id="main_image" name="main_image"
-                                   class="form-control" accept="image/jpeg,image/png,image/webp">
-                            <div class="form-text">Laisser vide pour conserver la photo actuelle.</div>
+                            <input type="url" id="main_image" name="main_image"
+                                   class="form-control"
+                                   value="<?= Security::e($vehicle['main_image'] ?? '') ?>"
+                                   placeholder="https://exemple.com/voiture.jpg">
+                            <div class="form-text">Laisser vide pour conserver l'image actuelle. URL complète (http:// ou https://).</div>
                         </div>
 
                         <div class="col-12">

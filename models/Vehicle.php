@@ -147,38 +147,25 @@ class Vehicle extends Model
     }
 
 
-    public function handleImageUpload(array $file): ?string
+    public function validateImageUrl(string $url): ?string
     {
-        if ($file['error'] !== UPLOAD_ERR_OK) {
+        if ($url === '') {
             return null;
         }
 
-        if ($file['size'] > MAX_FILE_SIZE) {
+        if (mb_strlen($url) > 255) {
             return null;
         }
 
-        $mime = mime_content_type($file['tmp_name']);
-        if (!in_array($mime, ALLOWED_IMG_MIME, true)) {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
             return null;
         }
 
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ALLOWED_IMG_EXT, true)) {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        if (!is_string($scheme) || !in_array(strtolower($scheme), ['http', 'https'], true)) {
             return null;
         }
 
-        // Vérification binaire contre fichiers polyglot
-        if (@getimagesize($file['tmp_name']) === false) {
-            return null;
-        }
-
-        $filename = bin2hex(random_bytes(16)) . '.' . $ext;
-        $dest     = UPLOAD_PATH . $filename;
-
-        if (!move_uploaded_file($file['tmp_name'], $dest)) {
-            return null;
-        }
-
-        return $filename;
+        return $url;
     }
 }

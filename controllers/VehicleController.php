@@ -130,6 +130,7 @@ class VehicleController extends Controller
         $categoryId   = (int) ($_POST['category_id']  ?? 0);
         $pricePerDay  = (float) ($_POST['price_per_day'] ?? 0);
         $description  = trim($_POST['description']  ?? '');
+        $mainImageRaw = trim($_POST['main_image']   ?? '');
 
         if ($title === '' || $brand === '' || $model === '' || $registration === '' || $categoryId === 0 || $pricePerDay <= 0) {
             Session::flash('error', 'Tous les champs obligatoires doivent être remplis.');
@@ -151,10 +152,10 @@ class VehicleController extends Controller
         $vehicleModel = new Vehicle();
         $mainImage    = null;
 
-        if (!empty($_FILES['main_image']['name'])) {
-            $mainImage = $vehicleModel->handleImageUpload($_FILES['main_image']);
+        if ($mainImageRaw !== '') {
+            $mainImage = $vehicleModel->validateImageUrl($mainImageRaw);
             if ($mainImage === null) {
-                Session::flash('error', 'Image invalide. Formats acceptés : JPG, PNG, WEBP (max 5 Mo).');
+                Session::flash('error', 'Lien image invalide. Utilisez une URL complète commençant par http:// ou https://.');
                 $this->redirect('/vehicles/create');
             }
         }
@@ -205,6 +206,7 @@ class VehicleController extends Controller
         $categoryId   = (int) ($_POST['category_id']   ?? 0);
         $pricePerDay  = (float) ($_POST['price_per_day']  ?? 0);
         $description  = trim($_POST['description']  ?? '');
+        $mainImageRaw = trim($_POST['main_image']   ?? '');
 
         if ($title === '' || $brand === '' || $model === '' || $registration === '' || $categoryId === 0 || $pricePerDay <= 0) {
             Session::flash('error', 'Tous les champs obligatoires doivent être remplis.');
@@ -225,16 +227,13 @@ class VehicleController extends Controller
 
         $mainImage = $vehicle['main_image'];
 
-        if (!empty($_FILES['main_image']['name'])) {
-            $uploaded = $vehicleModel->handleImageUpload($_FILES['main_image']);
-            if ($uploaded === null) {
-                Session::flash('error', 'Image invalide. Formats acceptés : JPG, PNG, WEBP (max 5 Mo).');
+        if ($mainImageRaw !== '') {
+            $validated = $vehicleModel->validateImageUrl($mainImageRaw);
+            if ($validated === null) {
+                Session::flash('error', 'Lien image invalide. Utilisez une URL complète commençant par http:// ou https://.');
                 $this->redirect('/vehicles/' . $id . '/edit');
             }
-            if ($mainImage && file_exists(UPLOAD_PATH . $mainImage)) {
-                unlink(UPLOAD_PATH . $mainImage);
-            }
-            $mainImage = $uploaded;
+            $mainImage = $validated;
         }
 
         $vehicleModel->update((int) $id, [
@@ -260,10 +259,6 @@ class VehicleController extends Controller
 
         $vehicle      = $this->getOwnedVehicle((int) $id);
         $vehicleModel = new Vehicle();
-
-        if ($vehicle['main_image'] && file_exists(UPLOAD_PATH . $vehicle['main_image'])) {
-            unlink(UPLOAD_PATH . $vehicle['main_image']);
-        }
 
         $vehicleModel->delete((int) $id);
 

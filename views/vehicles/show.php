@@ -5,7 +5,7 @@
     <!-- Photo + infos -->
     <div class="col-lg-7">
         <?php if ($vehicle['main_image']): ?>
-            <img src="<?= UPLOAD_URL . Security::e($vehicle['main_image']) ?>"
+            <img src="<?= Security::e($vehicle['main_image']) ?>"
                  class="img-fluid rounded shadow-sm w-100 object-fit-cover"
                  style="max-height:420px"
                  alt="<?= Security::e($vehicle['title']) ?>">

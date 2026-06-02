@@ -14,8 +14,7 @@
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
 
-                <form method="POST" action="<?= APP_URL ?>/vehicles/create"
-                      enctype="multipart/form-data" novalidate>
+                    <form method="POST" action="<?= APP_URL ?>/vehicles/create" novalidate>
                     <?= Security::csrfField() ?>
 
                     <div class="row g-3">
@@ -64,10 +63,11 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label for="main_image" class="form-label fw-semibold">Photo principale</label>
-                            <input type="file" id="main_image" name="main_image"
-                                   class="form-control" accept="image/jpeg,image/png,image/webp">
-                            <div class="form-text">JPG, PNG, WEBP – max 5 Mo</div>
+                            <label for="main_image" class="form-label fw-semibold">Lien de l'image principale</label>
+                            <input type="url" id="main_image" name="main_image"
+                                   class="form-control"
+                                   placeholder="https://exemple.com/voiture.jpg">
+                            <div class="form-text">URL complète (http:// ou https://).</div>
                         </div>
 
                         <div class="col-12">

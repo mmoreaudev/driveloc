@@ -143,10 +143,6 @@ class AdminController extends Controller
             $this->redirect('/dashboard/admin/vehicles');
         }
 
-        if ($vehicle['main_image'] && file_exists(UPLOAD_PATH . $vehicle['main_image'])) {
-            unlink(UPLOAD_PATH . $vehicle['main_image']);
-        }
-
         Session::flash('success', 'Véhicule supprimé.');
         $this->redirect('/dashboard/admin/vehicles');
     }

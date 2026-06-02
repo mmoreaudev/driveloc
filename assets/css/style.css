@@ -1,17 +1,11 @@
-/* Style personnalisé pour DriveLoc
-   Bootstrap 5 est déjà inclus, ce fichier ajoute les trucs en plus */
-
-/* Corps de page */
 body {
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-/* Navbar */
 .navbar-brand {
     letter-spacing: -0.5px;
 }
 
-/* Cartes véhicules - petit effet au survol */
 .card {
     transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
@@ -21,39 +15,32 @@ body {
     transform: translateY(-2px);
 }
 
-/* Pour que les images remplissent bien leur conteneur */
 .object-fit-cover {
     object-fit: cover;
 }
 
-/* Badges - largeur automatique */
 .w-fit {
     width: fit-content;
 }
 
-/* Tableau - en-têtes en majuscules */
 .table th {
     font-size: 0.82rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-/* Boutons */
 .btn {
     border-radius: 6px;
 }
 
-/* Icônes dans les stats du dashboard */
 .card .bi {
     line-height: 1;
 }
 
-/* Footer */
 footer {
     border-top: 3px solid #ffc107;
 }
 
-/* Sur mobile les images de carte sont plus petites */
 @media (max-width: 576px) {
     .card-img-top {
         height: 160px !important;
