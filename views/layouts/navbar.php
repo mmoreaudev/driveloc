@@ -42,9 +42,6 @@
                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle"></i>
                             <?= Security::e(Session::userFirstname()) ?>
-                            <span class="badge bg-secondary ms-1 text-uppercase" style="font-size:.65rem">
-                                <?= Security::e(Session::userRole()) ?>
-                            </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
