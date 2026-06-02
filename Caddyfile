@@ -1,0 +1,22 @@
+# DriveLoc - Caddy + PHP-FPM (sans Docker)
+# Root application: /var/www/driveloc
+# Adaptez le nom de domaine et la version PHP-FPM selon votre serveur.
+
+driveloc.example.com {
+    root * /var/www/driveloc
+    encode zstd gzip
+
+    # Bloque l'acces HTTP direct aux fichiers sensibles
+    @forbidden path_regexp forbidden (?i).*(\.(sql|log|md|env|gitkeep)|^/\.git)
+    respond @forbidden 403
+
+    # Empêche l'exécution de scripts dans /uploads
+    @uploadsScripts path_regexp uploadsScripts (?i)^/uploads/.*\.(php[0-9]?|phtml|phar|pl|py|cgi|sh|rb|asp|aspx|jsp)$
+    respond @uploadsScripts 403
+
+    route {
+        try_files {path} {path}/ /index.php?{query}
+        php_fastcgi unix//run/php/php8.2-fpm.sock
+        file_server
+    }
+}
