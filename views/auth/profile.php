@@ -30,7 +30,7 @@
 
             <!-- ══ BLOC 1 : Informations personnelles ══ -->
             <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 h-100" style="box-shadow: 2px 2px 4px 1px #252525;">
                     <div class="card-header bg-dark text-white fw-semibold">
                         <i class="bi bi-person me-2"></i>Informations personnelles
                     </div>
@@ -90,7 +90,7 @@
 
             <!-- ══ BLOC 2 : Changer le mot de passe ══ -->
             <div class="col-md-6">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 h-100" style="box-shadow: 2px 2px 4px 1px #252525;">
                     <div class="card-header bg-dark text-white fw-semibold">
                         <i class="bi bi-key me-2"></i>Changer le mot de passe
                     </div>

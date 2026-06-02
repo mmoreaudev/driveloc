@@ -51,7 +51,7 @@ function fmt(string $d): string {
 
 <!-- ═══════ FORMULAIRE DE RECHERCHE ═══════════════════ -->
 <form method="GET" action="<?= APP_URL ?>/vehicles"
-      class="card card-body mb-3 shadow-sm border-0 bg-white"
+      class="card card-body mb-3 border-0 bg-white" style="box-shadow: 2px 2px 4px 1px #252525;"
       id="searchForm">
 
     <!-- Ligne 1 : critères principaux -->
@@ -171,7 +171,7 @@ function fmt(string $d): string {
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <?php foreach ($vehicles as $v): ?>
             <div class="col">
-                <div class="card h-100 shadow-sm border-0">
+                <div class="card h-100 border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
 
                     <?php if ($v['main_image']): ?>
                         <img src="<?= Security::e($v['main_image']) ?>"

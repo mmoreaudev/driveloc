@@ -3,7 +3,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
 
-        <div class="card shadow-sm border-0 mt-4">
+        <div class="card border-0 mt-4" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body p-4">
 
                 <h1 class="h4 fw-bold text-center mb-4">

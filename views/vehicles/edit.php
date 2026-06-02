@@ -12,7 +12,7 @@
             <div class="alert alert-danger"><?= Security::e($error) ?></div>
         <?php endif; ?>
 
-        <div class="card shadow-sm border-0">
+        <div class="card border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body p-4">
 
                     <form method="POST"

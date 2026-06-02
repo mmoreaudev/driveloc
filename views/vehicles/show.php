@@ -6,8 +6,8 @@
     <div class="col-lg-7">
         <?php if ($vehicle['main_image']): ?>
             <img src="<?= Security::e($vehicle['main_image']) ?>"
-                 class="img-fluid rounded shadow-sm w-100 object-fit-cover"
-                 style="max-height:420px"
+                 class="img-fluid rounded w-100 object-fit-cover"
+                 style="max-height:420px;box-shadow: 2px 2px 4px 1px #252525;"
                  alt="<?= Security::e($vehicle['title']) ?>">
         <?php else: ?>
             <div class="bg-secondary rounded d-flex align-items-center justify-content-center"

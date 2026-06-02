@@ -20,7 +20,7 @@
 
     <!-- Liste -->
     <div class="col-md-7">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body">
                 <h2 class="h6 fw-bold mb-3">Catégories existantes</h2>
                 <ul class="list-group list-group-flush">
@@ -37,7 +37,7 @@
 
     <!-- Formulaire ajout -->
     <div class="col-md-5">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
             <div class="card-body">
                 <h2 class="h6 fw-bold mb-3">Ajouter une catégorie</h2>
                 <form method="POST" action="<?= APP_URL ?>/dashboard/admin/categories/create">

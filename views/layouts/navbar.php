@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
     <div class="container">
         <!-- Brand -->
         <a class="navbar-brand fw-bold fs-4" href="<?= APP_URL ?>">
