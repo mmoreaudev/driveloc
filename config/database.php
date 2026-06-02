@@ -13,7 +13,7 @@ final class Database
     public static function getInstance(): PDO
     {
         if (self::$instance === null) {
-            $host   = getenv('DB_HOST')  ?: 'localhost';
+            $host   = getenv('DB_HOST')  ?: '127.0.0.1';
             $dbname = getenv('DB_NAME')  ?: 'driveloc';
             $user   = getenv('DB_USER')  ?: 'driveloc';
             $pass   = getenv('DB_PASS')  ?: 'driveloc';

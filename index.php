@@ -1,9 +1,45 @@
 <?php
 declare(strict_types=1);
 
-// Debug temporaire: affiche les erreurs PHP directement dans la page.
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
+// Charge les variables depuis .env si elles ne sont pas deja definies
+// dans l'environnement du serveur (PHP-FPM, systemd, etc.).
+$envFile = __DIR__ . '/.env';
+if (is_readable($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (is_array($lines)) {
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+                continue;
+            }
+
+            [$name, $value] = explode('=', $line, 2);
+            $name = trim($name);
+            $value = trim($value);
+
+            if ($name === '' || getenv($name) !== false) {
+                continue;
+            }
+
+            if (
+                (str_starts_with($value, '"') && str_ends_with($value, '"'))
+                || (str_starts_with($value, "'") && str_ends_with($value, "'"))
+            ) {
+                $value = substr($value, 1, -1);
+            }
+
+            putenv($name . '=' . $value);
+            $_ENV[$name] = $value;
+            $_SERVER[$name] = $value;
+        }
+    }
+}
+
+// Active l'affichage des erreurs uniquement si DEBUG_DISPLAY_ERRORS=true.
+$displayErrorsFlag = strtolower((string) (getenv('DEBUG_DISPLAY_ERRORS') ?: 'false'));
+$displayErrors = in_array($displayErrorsFlag, ['1', 'true', 'yes', 'on'], true);
+ini_set('display_errors', $displayErrors ? '1' : '0');
+ini_set('display_startup_errors', $displayErrors ? '1' : '0');
 error_reporting(E_ALL);
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
