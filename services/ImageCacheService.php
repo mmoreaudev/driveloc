@@ -4,8 +4,10 @@ declare(strict_types=1);
 final class ImageCacheService
 {
     private const CACHE_RELATIVE_DIR = '/assets/cache/vehicles';
-    private const MAX_WIDTH = 1400;
-    private const JPEG_QUALITY = 76;
+    private const MAX_WIDTH = 960;
+    private const JPEG_QUALITY = 62;
+    private const WEBP_QUALITY = 64;
+    private const DOWNLOAD_TIMEOUT_SECONDS = 4;
 
     public static function cacheExternalImage(?string $url): ?string
     {
@@ -32,14 +34,20 @@ final class ImageCacheService
         }
 
         $fileBase = hash('sha256', $url);
-        $cacheFile = $cacheDir . '/' . $fileBase . '.jpg';
+        $preferredExt = function_exists('imagewebp') ? 'webp' : 'jpg';
+        $cacheFile = $cacheDir . '/' . $fileBase . '.' . $preferredExt;
         if (is_file($cacheFile)) {
             return APP_URL . self::CACHE_RELATIVE_DIR . '/' . basename($cacheFile);
         }
 
+        $legacyJpg = $cacheDir . '/' . $fileBase . '.jpg';
+        if (is_file($legacyJpg)) {
+            return APP_URL . self::CACHE_RELATIVE_DIR . '/' . basename($legacyJpg);
+        }
+
         $context = stream_context_create([
-            'http' => ['timeout' => 8, 'follow_location' => 1],
-            'https' => ['timeout' => 8, 'follow_location' => 1],
+            'http' => ['timeout' => self::DOWNLOAD_TIMEOUT_SECONDS, 'follow_location' => 1],
+            'https' => ['timeout' => self::DOWNLOAD_TIMEOUT_SECONDS, 'follow_location' => 1],
         ]);
 
         $binary = @file_get_contents($url, false, $context);
@@ -79,7 +87,11 @@ final class ImageCacheService
 
         imagecopyresampled($destination, $source, 0, 0, 0, 0, $dstW, max(1, $dstH), $srcW, $srcH);
 
-        $saved = @imagejpeg($destination, $cacheFile, self::JPEG_QUALITY);
+        if ($preferredExt === 'webp' && function_exists('imagewebp')) {
+            $saved = @imagewebp($destination, $cacheFile, self::WEBP_QUALITY);
+        } else {
+            $saved = @imagejpeg($destination, $cacheFile, self::JPEG_QUALITY);
+        }
 
         imagedestroy($source);
         imagedestroy($destination);

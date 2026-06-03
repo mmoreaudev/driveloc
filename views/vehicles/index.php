@@ -170,7 +170,8 @@ function fmt(string $d): string {
                     <?php if ($v['main_image']): ?>
                         <img src="<?= ($v['main_image']) ?>"
                              class="card-img-top object-fit-cover" style="height:200px"
-                             alt="<?= ($v['title']) ?>">
+                             alt="<?= ($v['title']) ?>"
+                             loading="lazy" decoding="async">
                     <?php else: ?>
                         <div class="bg-secondary d-flex align-items-center justify-content-center"
                              style="height:200px">

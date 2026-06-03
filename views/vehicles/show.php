@@ -7,7 +7,8 @@
             <img src="<?= ($vehicle['main_image']) ?>"
                  class="img-fluid rounded w-100 object-fit-cover"
                  style="max-height:420px;box-shadow: 2px 2px 4px 1px #252525;"
-                 alt="<?= ($vehicle['title']) ?>">
+                 alt="<?= ($vehicle['title']) ?>"
+                 fetchpriority="high" decoding="async">
         <?php else: ?>
             <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
                  style="height:300px">
