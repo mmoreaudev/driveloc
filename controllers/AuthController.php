@@ -130,6 +130,8 @@ class AuthController extends Controller
 
     public function profileForm(): void
     {
+        $this->requireLogin();
+
         $user = (new User())->findById(Session::userId());
 
         $this->render('auth/profile', [
@@ -144,6 +146,8 @@ class AuthController extends Controller
 
     public function updateProfile(): void
     {
+        $this->requireLogin();
+
         $firstname = trim($_POST['firstname'] ?? '');
         $lastname  = trim($_POST['lastname']  ?? '');
         $email     = trim($_POST['email']     ?? '');
@@ -176,6 +180,8 @@ class AuthController extends Controller
 
     public function changePassword(): void
     {
+        $this->requireLogin();
+
         $current = $_POST['current_password'] ?? '';
         $new     = $_POST['new_password']     ?? '';
         $confirm = $_POST['confirm_password'] ?? '';
