@@ -102,7 +102,7 @@ $landingCategories = array_slice($categories, 0, 8);
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
             <?php foreach ($featuredVehicles as $vehicle): ?>
                 <div class="col">
-                    <a href="<?= APP_URL ?>/vehicles/<?= (int) $vehicle['id'] ?>">
+                    <a href="<?= APP_URL ?>/vehicles/<?= (int) $vehicle['id'] ?>" class="text-decoration-none text-dark h-100">
                     <article class="card h-100 border-0">
                         <?php if (!empty($vehicle['main_image'])): ?>
                             <img src="<?= ($vehicle['main_image']) ?>" class="card-img-top object-fit-cover" style="height: 210px" alt="<?= ($vehicle['title']) ?>">
