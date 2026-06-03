@@ -63,6 +63,16 @@ h4 {
 .navbar {
     background: linear-gradient(180deg, #101010 0%, #000000 100%) !important;
     border-bottom: 2px solid var(--sixt-orange);
+    position: relative;
+    z-index: 1100;
+}
+
+.navbar .container {
+    animation: none;
+}
+
+.navbar .dropdown-menu {
+    z-index: 1200;
 }
 
 .navbar-brand {
