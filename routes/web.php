@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-$router->get('/',                                     'VehicleController',     'index');
+$router->get('/',                                     'HomeController',        'index');
 $router->get('/login',                                'AuthController',        'loginForm');
 $router->post('/login',                               'AuthController',        'login');
 $router->get('/register',                             'AuthController',        'registerForm');
