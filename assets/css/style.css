@@ -336,6 +336,105 @@ footer a:focus {
     box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
 
+.landing-category-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 94px;
+    padding: 0.95rem;
+    border-radius: 10px;
+    border: 1px solid #d9d9d9;
+    text-decoration: none;
+    color: #111111;
+    background: #ffffff;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.landing-category-card:hover,
+.landing-category-card:focus {
+    transform: translateY(-3px);
+    border-color: var(--sixt-orange);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.14);
+    color: #111111;
+}
+
+.landing-category-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.landing-category-icon .bi {
+    font-size: 1.15rem;
+}
+
+.landing-category-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.landing-category-label {
+    display: block;
+    font-weight: 700;
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-family: 'Barlow Condensed', 'Montserrat', sans-serif;
+    letter-spacing: 0.03em;
+}
+
+.landing-category-cta {
+    font-size: 0.8rem;
+    color: #5b5b5b;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 600;
+}
+
+.landing-category-arrow {
+    margin-left: auto;
+    font-size: 1.1rem;
+    color: #444444;
+}
+
+.landing-category-tone-1 {
+    background: linear-gradient(145deg, #ffffff 0%, #f9f7f4 100%);
+}
+
+.landing-category-tone-1 .landing-category-icon {
+    background: #fff1e8;
+}
+
+.landing-category-tone-2 {
+    background: linear-gradient(145deg, #ffffff 0%, #f3f6fa 100%);
+}
+
+.landing-category-tone-2 .landing-category-icon {
+    background: #eaf2ff;
+}
+
+.landing-category-tone-3 {
+    background: linear-gradient(145deg, #ffffff 0%, #f4f8f4 100%);
+}
+
+.landing-category-tone-3 .landing-category-icon {
+    background: #eaf8eb;
+}
+
+.landing-category-tone-4 {
+    background: linear-gradient(145deg, #ffffff 0%, #f9f3f3 100%);
+}
+
+.landing-category-tone-4 .landing-category-icon {
+    background: #fdeeee;
+}
+
 @keyframes reveal-up {
     from {
         opacity: 0;

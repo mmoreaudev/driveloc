@@ -15,7 +15,7 @@ class HomeController extends Controller
 
         $this->render('home/index', [
             'pageTitle' => 'Location de vehicules - ' . APP_NAME,
-            'featuredVehicles' => array_slice($vehicles, 0, 6),
+            'featuredVehicles' => array_slice($vehicles, 0, 3),
             'categories' => $categoryModel->all(),
             'error' => Session::getFlash('error'),
             'success' => Session::getFlash('success'),

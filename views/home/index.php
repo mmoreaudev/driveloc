@@ -7,10 +7,39 @@
     <div class="alert alert-success mb-4"><?= ($success) ?></div>
 <?php endif; ?>
 
+<?php
+$categoryIcons = [
+    'suv' => 'bi-truck-front',
+    'citadine' => 'bi-car-front',
+    'berline' => 'bi-car-front-fill',
+    'familiale' => 'bi-people',
+    'utilitaire' => 'bi-box-seam',
+    'luxe' => 'bi-stars',
+    'sport' => 'bi-lightning-charge',
+    'electrique' => 'bi-ev-front',
+    '4x4' => 'bi-sign-turn-right',
+    'cabriolet' => 'bi-sun',
+    'moto' => 'bi-bicycle',
+];
+
+$pickCategoryIcon = static function (string $categoryName) use ($categoryIcons): string {
+    $slug = strtolower($categoryName);
+
+    foreach ($categoryIcons as $keyword => $icon) {
+        if (str_contains($slug, $keyword)) {
+            return $icon;
+        }
+    }
+
+    return 'bi-car-front';
+};
+
+$landingCategories = array_slice($categories, 0, 8);
+?>
+
 <section class="landing-hero mb-5">
     <div class="row g-4 align-items-center">
         <div class="col-lg-7">
-            <span class="landing-kicker">DriveLoc</span>
             <h1 class="mb-3">Louez un vehicule sans friction</h1>
             <p class="lead text-muted mb-4">
                 Trouvez rapidement le modele ideal pour un week-end, un demenagement ou un depart en vacances.
@@ -44,16 +73,29 @@
         <a href="<?= APP_URL ?>/vehicles" class="btn btn-sm btn-outline-dark">Tout afficher</a>
     </div>
 
-    <div class="row g-3">
-        <?php foreach (array_slice($categories, 0, 8) as $category): ?>
-            <div class="col-6 col-md-4 col-xl-3">
-                <a class="landing-category d-flex align-items-center justify-content-between" href="<?= APP_URL ?>/vehicles?category_id=<?= (int) $category['id'] ?>">
-                    <span><?= ($category['name']) ?></span>
-                    <i class="bi bi-arrow-right-short"></i>
-                </a>
-            </div>
-        <?php endforeach; ?>
-    </div>
+    <?php if (empty($landingCategories)): ?>
+        <div class="alert alert-warning mb-0">Aucune categorie n'est disponible pour le moment.</div>
+    <?php else: ?>
+        <div class="row g-3">
+            <?php foreach ($landingCategories as $index => $category): ?>
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                    <a class="landing-category-card landing-category-tone-<?= ($index % 4) + 1 ?>"
+                       href="<?= APP_URL ?>/vehicles?category_id=<?= (int) $category['id'] ?>">
+                        <span class="landing-category-icon">
+                            <i class="bi <?= $pickCategoryIcon((string) $category['name']) ?>"></i>
+                        </span>
+                        <span class="landing-category-content">
+                            <span class="landing-category-label"><?= ($category['name']) ?></span>
+                            <span class="landing-category-cta">Explorer</span>
+                        </span>
+                        <span class="landing-category-arrow">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </span>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
 </section>
 
 <section>
