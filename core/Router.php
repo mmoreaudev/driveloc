@@ -5,38 +5,35 @@ class Router
 {
     private array $routes = [];
 
+    public function route(string $method, string $path, string $controller, string $action): void
+    {
+        $this->routes[] = [$method, $path, $controller, $action];
+    }
+
     public function get(string $path, string $controller, string $action): void
     {
-        $this->routes[] = ['GET', $path, $controller, $action];
+        $this->route('GET', $path, $controller, $action);
     }
 
     public function post(string $path, string $controller, string $action): void
     {
-        $this->routes[] = ['POST', $path, $controller, $action];
+        $this->route('POST', $path, $controller, $action);
     }
 
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
-
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
         $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-        if ($base !== '' && str_starts_with($uri, $base)) {
+        
+        if ($base && str_starts_with($uri, $base)) {
             $uri = substr($uri, strlen($base));
         }
-
         $uri = '/' . ltrim($uri ?: '/', '/');
 
-        foreach ($this->routes as [$routeMethod, $routePath, $controllerName, $actionName]) {
-            if ($routeMethod !== $method) {
-                continue;
-            }
-
-            $pattern = '#^' . $routePath . '$#';
-
-            if (preg_match($pattern, $uri, $matches)) {
-                array_shift($matches);
-                $this->call($controllerName, $actionName, $matches);
+        foreach ($this->routes as [$routeMethod, $routePath, $controller, $action]) {
+            if ($routeMethod === $method && preg_match('#^' . $routePath . '$#', $uri, $matches)) {
+                $this->call($controller, $action, array_slice($matches, 1));
                 return;
             }
         }
@@ -45,22 +42,14 @@ class Router
         require VIEWS_PATH . '/errors/404.php';
     }
 
-    private function call(string $controllerName, string $actionName, array $params): void
+    private function call(string $controller, string $action, array $params): void
     {
-        $file = ROOT_PATH . '/controllers/' . $controllerName . '.php';
-
-        if (!file_exists($file)) {
-            throw new RuntimeException("Contrôleur introuvable : $controllerName");
+        $file = ROOT_PATH . '/controllers/' . $controller . '.php';
+        
+        if (!file_exists($file) || !method_exists($c = new $controller(), $action)) {
+            throw new RuntimeException("Contrôleur/Action introuvable: $controller::$action");
         }
-
-        require_once $file;
-
-        $controller = new $controllerName();
-
-        if (!method_exists($controller, $actionName)) {
-            throw new RuntimeException("Action introuvable : $actionName dans $controllerName");
-        }
-
-        $controller->$actionName(...$params);
+        
+        $c->$action(...$params);
     }
 }
