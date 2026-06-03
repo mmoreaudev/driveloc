@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once ROOT_PATH . '/models/Vehicle.php';
 require_once ROOT_PATH . '/models/Category.php';
 require_once ROOT_PATH . '/models/Reservation.php';
+require_once ROOT_PATH . '/services/ImageCacheService.php';
 
 class VehicleController extends Controller
 {
@@ -26,9 +27,17 @@ class VehicleController extends Controller
 
         $dateError = $this->validateDates($startRaw, $endRaw, $startDate, $endDate);
 
+        $vehicles = $this->cacheVehicleImages($this->vehicleModel->search([
+            'category_id' => $categoryId,
+            'brand' => $brand ?: null,
+            'max_price' => $maxPrice ?: null,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]));
+
         $this->render('vehicles/index', [
             'pageTitle'  => 'Véhicules disponibles – ' . APP_NAME,
-            'vehicles'   => $this->vehicleModel->search(['category_id' => $categoryId, 'brand' => $brand ?: null, 'max_price' => $maxPrice ?: null, 'start_date' => $startDate, 'end_date' => $endDate]),
+            'vehicles'   => $vehicles,
             'categories' => $this->categoryModel->all(),
             'filters'    => ['category_id' => $categoryId, 'brand' => $brand, 'max_price' => $maxPrice, 'start_date' => $startDate, 'end_date' => $endDate],
             'raw'        => ['start_date' => $startRaw ?? '', 'end_date' => $endRaw ?? '', 'brand' => $brand ?? '', 'max_price' => $maxPrice ?? '', 'category_id' => $categoryId ?? ''],
@@ -47,6 +56,8 @@ class VehicleController extends Controller
             require VIEWS_PATH . '/errors/404.php';
             return;
         }
+
+        $vehicle = $this->cacheVehicleImage($vehicle);
 
         $this->render('vehicles/show', [
             'pageTitle'      => $vehicle['title'] . ' – ' . APP_NAME,
@@ -84,7 +95,7 @@ class VehicleController extends Controller
 
     public function editForm(string $id): void
     {
-        $vehicle = $this->getOwnedVehicle((int) $id);
+        $vehicle = $this->cacheVehicleImage($this->getOwnedVehicle((int) $id));
         $this->render('vehicles/edit', [
             'pageTitle'  => 'Modifier le véhicule – ' . APP_NAME,
             'vehicle'    => $vehicle,
@@ -192,15 +203,36 @@ class VehicleController extends Controller
 
     public function landing(): void
     {
-        $vehicles = (new Vehicle())->search();
+        $vehicles = $this->cacheVehicleImages($this->vehicleModel->search());
 
         $this->render('home/index', [
             'pageTitle'        => 'Location de vehicules – ' . APP_NAME,
             'featuredVehicles' => array_slice($vehicles, 0, 6),
-            'categories'       => (new Category())->all(),
+            'categories'       => $this->categoryModel->all(),
             'error'            => Session::getFlash('error'),
             'success'          => Session::getFlash('success'),
         ]);
+    }
+
+
+    private function cacheVehicleImages(array $vehicles): array
+    {
+        foreach ($vehicles as $i => $vehicle) {
+            if (is_array($vehicle)) {
+                $vehicles[$i] = $this->cacheVehicleImage($vehicle);
+            }
+        }
+
+        return $vehicles;
+    }
+
+    private function cacheVehicleImage(array $vehicle): array
+    {
+        if (!empty($vehicle['main_image']) && is_string($vehicle['main_image'])) {
+            $vehicle['main_image'] = ImageCacheService::cacheExternalImage($vehicle['main_image']);
+        }
+
+        return $vehicle;
     }
 
 

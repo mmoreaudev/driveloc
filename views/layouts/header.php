@@ -11,6 +11,14 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="<?= APP_URL ?>/assets/css/style.css">
+    <style>
+  .dropdown-menu {
+    z-index: 9999 !important;
+  }
+  .navbar {
+    z-index: 1050;
+  }
+</style>
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
