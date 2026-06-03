@@ -319,48 +319,37 @@ footer a:focus {
     background: #ffffff;
 }
 
-.landing-category {
-    padding: 0.85rem 0.95rem;
-    border: 1px solid #d9d9d9;
-    border-radius: 6px;
-    background: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.landing-category:hover,
-.landing-category:focus {
-    transform: translateY(-2px);
-    border-color: var(--sixt-orange);
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
-}
-
-.landing-category-card {
+.landing-category-chips {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+
+.landing-category-chip {
+    display: inline-flex;
     align-items: center;
-    gap: 0.85rem;
-    min-height: 94px;
-    padding: 0.95rem;
-    border-radius: 10px;
-    border: 1px solid #d9d9d9;
+    gap: 0.55rem;
+    min-height: 46px;
+    padding: 0.45rem 0.95rem 0.45rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid #d3d3d3;
     text-decoration: none;
     color: #111111;
     background: #ffffff;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.landing-category-card:hover,
-.landing-category-card:focus {
-    transform: translateY(-3px);
+.landing-category-chip:hover,
+.landing-category-chip:focus {
+    transform: translateY(-2px);
     border-color: var(--sixt-orange);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.13);
     color: #111111;
 }
 
 .landing-category-icon {
-    width: 42px;
-    height: 42px;
+    width: 34px;
+    height: 34px;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
@@ -370,41 +359,19 @@ footer a:focus {
 }
 
 .landing-category-icon .bi {
-    font-size: 1.15rem;
-}
-
-.landing-category-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    min-width: 0;
+    font-size: 0.95rem;
 }
 
 .landing-category-label {
-    display: block;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1;
     text-transform: uppercase;
     font-family: 'Barlow Condensed', 'Montserrat', sans-serif;
-    letter-spacing: 0.03em;
-}
-
-.landing-category-cta {
-    font-size: 0.8rem;
-    color: #5b5b5b;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    font-weight: 600;
-}
-
-.landing-category-arrow {
-    margin-left: auto;
-    font-size: 1.1rem;
-    color: #444444;
+    letter-spacing: 0.035em;
 }
 
 .landing-category-tone-1 {
-    background: linear-gradient(145deg, #ffffff 0%, #f9f7f4 100%);
+    background: linear-gradient(145deg, #ffffff 0%, #fdf7f2 100%);
 }
 
 .landing-category-tone-1 .landing-category-icon {
@@ -412,7 +379,7 @@ footer a:focus {
 }
 
 .landing-category-tone-2 {
-    background: linear-gradient(145deg, #ffffff 0%, #f3f6fa 100%);
+    background: linear-gradient(145deg, #ffffff 0%, #f3f7ff 100%);
 }
 
 .landing-category-tone-2 .landing-category-icon {
@@ -420,7 +387,7 @@ footer a:focus {
 }
 
 .landing-category-tone-3 {
-    background: linear-gradient(145deg, #ffffff 0%, #f4f8f4 100%);
+    background: linear-gradient(145deg, #ffffff 0%, #f3faf4 100%);
 }
 
 .landing-category-tone-3 .landing-category-icon {
@@ -428,7 +395,7 @@ footer a:focus {
 }
 
 .landing-category-tone-4 {
-    background: linear-gradient(145deg, #ffffff 0%, #f9f3f3 100%);
+    background: linear-gradient(145deg, #ffffff 0%, #fbf4f4 100%);
 }
 
 .landing-category-tone-4 .landing-category-icon {

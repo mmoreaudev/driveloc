@@ -76,23 +76,15 @@ $landingCategories = array_slice($categories, 0, 8);
     <?php if (empty($landingCategories)): ?>
         <div class="alert alert-warning mb-0">Aucune categorie n'est disponible pour le moment.</div>
     <?php else: ?>
-        <div class="row g-3">
+        <div class="landing-category-chips">
             <?php foreach ($landingCategories as $index => $category): ?>
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                    <a class="landing-category-card landing-category-tone-<?= ($index % 4) + 1 ?>"
-                       href="<?= APP_URL ?>/vehicles?category_id=<?= (int) $category['id'] ?>">
-                        <span class="landing-category-icon">
-                            <i class="bi <?= $pickCategoryIcon((string) $category['name']) ?>"></i>
-                        </span>
-                        <span class="landing-category-content">
-                            <span class="landing-category-label"><?= ($category['name']) ?></span>
-                            <span class="landing-category-cta">Explorer</span>
-                        </span>
-                        <span class="landing-category-arrow">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </span>
-                    </a>
-                </div>
+                <a class="landing-category-chip landing-category-tone-<?= ($index % 4) + 1 ?>"
+                   href="<?= APP_URL ?>/vehicles?category_id=<?= (int) $category['id'] ?>">
+                    <span class="landing-category-icon">
+                        <i class="bi <?= $pickCategoryIcon((string) $category['name']) ?>"></i>
+                    </span>
+                    <span class="landing-category-label"><?= ($category['name']) ?></span>
+                </a>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
