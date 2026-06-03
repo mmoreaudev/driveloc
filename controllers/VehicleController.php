@@ -190,6 +190,20 @@ class VehicleController extends Controller
         return null;
     }
 
+    public function landing(): void
+    {
+        $vehicles = (new Vehicle())->search();
+
+        $this->render('home/index', [
+            'pageTitle'        => 'Location de vehicules – ' . APP_NAME,
+            'featuredVehicles' => array_slice($vehicles, 0, 6),
+            'categories'       => (new Category())->all(),
+            'error'            => Session::getFlash('error'),
+            'success'          => Session::getFlash('success'),
+        ]);
+    }
+
+
     private function getOwnedVehicle(int $id): array
     {
         $vehicle = $this->vehicleModel->findById($id);
