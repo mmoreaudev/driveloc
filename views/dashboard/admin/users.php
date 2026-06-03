@@ -2,7 +2,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h4 mb-0">Gestion des utilisateurs</h1>
-    <a href="<?= APP_URL ?>/dashboard/admin" class="btn btn-outline-dark btn-sm">Retour</a>
+    <a href="<?= APP_URL ?>/dashboard/admin" class="btn btn-outline-dark btn-sm">w</a>
 </div>
 
 <?php if (!empty($error)): ?>

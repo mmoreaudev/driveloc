@@ -86,6 +86,19 @@ h4 {
     color: var(--sixt-orange);
 }
 
+.brand-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    vertical-align: -0.25em;
+}
+
+.brand-icon-sm {
+    width: 22px;
+    height: 22px;
+    vertical-align: -0.15em;
+}
+
 .navbar .nav-link {
     color: rgba(255, 255, 255, 0.86) !important;
     font-family: 'Barlow Condensed', 'Montserrat', sans-serif;
