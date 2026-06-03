@@ -300,7 +300,6 @@ footer a:focus {
     border: 1px solid #e4e4e4;
     border-radius: 8px;
     padding: clamp(1.2rem, 3vw, 2.2rem);
-    box-shadow: var(--sixt-shadow);
 }
 
 .landing-kicker {
