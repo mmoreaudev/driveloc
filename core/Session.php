@@ -9,7 +9,7 @@ final class Session
             session_set_cookie_params([
                 'lifetime' => 0,
                 'path'     => '/',
-                'secure'   => true,
+                'secure'   => $isHttps,
                 'httponly' => true,
                 'samesite' => 'Strict',
             ]);

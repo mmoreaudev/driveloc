@@ -13,11 +13,11 @@ final class Database
     public static function getInstance(): PDO
     {
         if (self::$instance === null) {
-            $host   = getenv('DB_HOST');
-            $dbname = getenv('DB_NAME');
-            $user   = getenv('DB_USER');
-            $pass   = getenv('DB_PASS');
-            $port   = getenv('DB_PORT');
+            $host   = getenv('DB_HOST')  ?: '127.0.0.1';
+            $dbname = getenv('DB_NAME')  ?: 'driveloc';
+            $user   = getenv('DB_USER')  ?: 'driveloc';
+            $pass   = getenv('DB_PASS')  ?: 'driveloc';
+            $port   = (int) (getenv('DB_PORT') ?: 3306);
 
             $dsn = sprintf(
                 'mysql:host=%s;port=%d;dbname=%s;charset=%s',
