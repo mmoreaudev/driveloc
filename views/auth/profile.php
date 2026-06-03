@@ -166,12 +166,6 @@
     </div>
 </div>
 
-<div class="mt-3">
-    <a href="<?= APP_URL ?>/dashboard/<?= (Session::userRole()) ?>"
-       class="btn btn-link text-muted ps-0">
-        <i class="bi bi-arrow-left me-1"></i>Retour au tableau de bord
-    </a>
-</div>
 
 <script>
 (function () {

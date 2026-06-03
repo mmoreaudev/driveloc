@@ -10,6 +10,8 @@ class AdminController extends Controller
 {
     public function index(): void
     {
+        $this->requireRole('admin');
+
         $reservationModel = new Reservation();
         $userModel        = new User();
         $vehicleModel     = new Vehicle();
@@ -28,6 +30,8 @@ class AdminController extends Controller
 
     public function users(): void
     {
+        $this->requireRole('admin');
+
         $this->render('dashboard/admin/users', [
             'pageTitle' => 'Gestion des utilisateurs – ' . APP_NAME,
             'users'     => (new User())->all(),
@@ -38,6 +42,8 @@ class AdminController extends Controller
 
     public function toggleUser(string $id): void
     {
+        $this->requireRole('admin');
+
         $userId    = (int) $id;
         $userModel = new User();
         $user      = $userModel->findById($userId);
@@ -56,6 +62,8 @@ class AdminController extends Controller
 
     public function deleteUser(string $id): void
     {
+        $this->requireRole('admin');
+
         $userId = (int) $id;
         $user   = (new User())->findById($userId);
 
@@ -73,6 +81,8 @@ class AdminController extends Controller
 
     public function vehicles(): void
     {
+        $this->requireRole('admin');
+
         $this->render('dashboard/admin/vehicles', [
             'pageTitle' => 'Gestion des véhicules – ' . APP_NAME,
             'vehicles'  => (new Vehicle())->allForAdmin(),
@@ -83,6 +93,8 @@ class AdminController extends Controller
 
     public function toggleVehicle(string $id): void
     {
+        $this->requireRole('admin');
+
         $vehicleId    = (int) $id;
         $vehicleModel = new Vehicle();
         $vehicle      = $vehicleModel->findById($vehicleId);
@@ -101,6 +113,8 @@ class AdminController extends Controller
 
     public function deleteVehicle(string $id): void
     {
+        $this->requireRole('admin');
+
         $vehicleId    = (int) $id;
         $vehicleModel = new Vehicle();
         $vehicle      = $vehicleModel->findById($vehicleId);
@@ -130,6 +144,8 @@ class AdminController extends Controller
 
     public function categories(): void
     {
+        $this->requireRole('admin');
+
         $this->render('dashboard/admin/categories', [
             'pageTitle'  => 'Gestion des catégories – ' . APP_NAME,
             'categories' => (new Category())->all(),
@@ -140,6 +156,8 @@ class AdminController extends Controller
 
     public function createCategory(): void
     {
+        $this->requireRole('admin');
+
         $name          = trim($_POST['name'] ?? '');
         $categoryModel = new Category();
 

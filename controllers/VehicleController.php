@@ -27,7 +27,7 @@ class VehicleController extends Controller
 
         $dateError = $this->validateDates($startRaw, $endRaw, $startDate, $endDate);
 
-        $vehicles = $this->cacheVehicleImages($this->vehicleModel->search([
+        $vehicles = $this->cacheVehicleThumbnails($this->vehicleModel->search([
             'category_id' => $categoryId,
             'brand' => $brand ?: null,
             'max_price' => $maxPrice ?: null,
@@ -57,7 +57,7 @@ class VehicleController extends Controller
             return;
         }
 
-        $vehicle = $this->cacheVehicleImage($vehicle);
+        $vehicle = $this->cacheVehicleBaseImage($vehicle);
 
         $this->render('vehicles/show', [
             'pageTitle'      => $vehicle['title'] . ' – ' . APP_NAME,
@@ -95,7 +95,7 @@ class VehicleController extends Controller
 
     public function editForm(string $id): void
     {
-        $vehicle = $this->cacheVehicleImage($this->getOwnedVehicle((int) $id));
+        $vehicle = $this->cacheVehicleBaseImage($this->getOwnedVehicle((int) $id));
         $this->render('vehicles/edit', [
             'pageTitle'  => 'Modifier le véhicule – ' . APP_NAME,
             'vehicle'    => $vehicle,
@@ -203,7 +203,7 @@ class VehicleController extends Controller
 
     public function landing(): void
     {
-        $vehicles = $this->cacheVehicleImages($this->vehicleModel->search());
+        $vehicles = $this->cacheVehicleThumbnails($this->vehicleModel->search());
 
         $this->render('home/index', [
             'pageTitle'        => 'Location de vehicules – ' . APP_NAME,
@@ -215,21 +215,30 @@ class VehicleController extends Controller
     }
 
 
-    private function cacheVehicleImages(array $vehicles): array
+    private function cacheVehicleThumbnails(array $vehicles): array
     {
         foreach ($vehicles as $i => $vehicle) {
             if (is_array($vehicle)) {
-                $vehicles[$i] = $this->cacheVehicleImage($vehicle);
+                $vehicles[$i] = $this->cacheVehicleThumbnail($vehicle);
             }
         }
 
         return $vehicles;
     }
 
-    private function cacheVehicleImage(array $vehicle): array
+    private function cacheVehicleThumbnail(array $vehicle): array
     {
         if (!empty($vehicle['main_image']) && is_string($vehicle['main_image'])) {
-            $vehicle['main_image'] = ImageCacheService::cacheExternalImage($vehicle['main_image']);
+            $vehicle['main_image_thumb'] = ImageCacheService::cacheThumbnail($vehicle['main_image']);
+        }
+
+        return $vehicle;
+    }
+
+    private function cacheVehicleBaseImage(array $vehicle): array
+    {
+        if (!empty($vehicle['main_image']) && is_string($vehicle['main_image'])) {
+            $vehicle['main_image'] = ImageCacheService::cacheBaseImage($vehicle['main_image']);
         }
 
         return $vehicle;

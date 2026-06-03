@@ -8,6 +8,8 @@ class DashboardController extends Controller
 {
     public function client(): void
     {
+        $this->requireRole('client', 'owner', 'admin');
+
         $reservationModel = new Reservation();
         $reservations     = $reservationModel->findByClient(Session::userId());
         $stats            = $reservationModel->statsForClient(Session::userId());
@@ -30,6 +32,8 @@ class DashboardController extends Controller
 
     public function owner(): void
     {
+        $this->requireRole('owner', 'admin');
+
         $ownerId          = Session::userId();
         $reservationModel = new Reservation();
         $vehicleModel     = new Vehicle();

@@ -104,8 +104,8 @@ $landingCategories = array_slice($categories, 0, 8);
                 <div class="col">
                     <a href="<?= APP_URL ?>/vehicles/<?= (int) $vehicle['id'] ?>" class="text-decoration-none text-dark h-100">
                     <article class="card h-100 border-0">
-                        <?php if (!empty($vehicle['main_image'])): ?>
-                            <img src="<?= ($vehicle['main_image']) ?>" class="card-img-top object-fit-cover" style="height: 210px" alt="<?= ($vehicle['title']) ?>" loading="lazy" decoding="async">
+                        <?php if (!empty($vehicle['main_image_thumb']) || !empty($vehicle['main_image'])): ?>
+                            <img src="<?= ($vehicle['main_image_thumb'] ?? $vehicle['main_image']) ?>" class="card-img-top object-fit-cover" style="height: 210px" alt="<?= ($vehicle['title']) ?>" loading="lazy" decoding="async">
                         <?php else: ?>
                             <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 210px">
                                 <i class="bi bi-car-front text-white" style="font-size: 3rem"></i>

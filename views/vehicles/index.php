@@ -167,8 +167,8 @@ function fmt(string $d): string {
                    class="text-decoration-none text-dark h-100">
                 <div class="card h-100 border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
 
-                    <?php if ($v['main_image']): ?>
-                        <img src="<?= ($v['main_image']) ?>"
+                    <?php if (!empty($v['main_image_thumb']) || $v['main_image']): ?>
+                        <img src="<?= ($v['main_image_thumb'] ?? $v['main_image']) ?>"
                              class="card-img-top object-fit-cover" style="height:200px"
                              alt="<?= ($v['title']) ?>"
                              loading="lazy" decoding="async">

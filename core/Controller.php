@@ -31,4 +31,25 @@ abstract class Controller
         echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
         exit;
     }
+
+    protected function requireLogin(): void
+    {
+        if (!Session::isLoggedIn()) {
+            Session::set('_redirect_after_login', $_SERVER['REQUEST_URI'] ?? '/');
+            Session::flash('error', 'Veuillez vous connecter pour accéder à cette page.');
+            $this->redirect('/login');
+        }
+    }
+
+    protected function requireRole(string ...$roles): void
+    {
+        $this->requireLogin();
+
+        $currentRole = Session::userRole();
+        if ($currentRole === null || !in_array($currentRole, $roles, true)) {
+            http_response_code(403);
+            require VIEWS_PATH . '/errors/403.php';
+            exit;
+        }
+    }
 }
