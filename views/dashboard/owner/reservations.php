@@ -30,7 +30,7 @@
                             <?= ($r['client_firstname']) ?>
                             <?= ($r['client_lastname']) ?>
                         </td>
-                        <td><?= ($r['title']) ?></td>
+                        <td><?= ($r['vehicle_title'] ?? $r['title'] ?? '') ?></td>
                         <td class="small">
                             <?= ($r['start_date']) ?> → <?= ($r['end_date']) ?>
                         </td>
