@@ -45,11 +45,22 @@ class Router
     private function call(string $controller, string $action, array $params): void
     {
         $file = ROOT_PATH . '/controllers/' . $controller . '.php';
-        
-        if (!file_exists($file) || !method_exists($c = new $controller(), $action)) {
-            throw new RuntimeException("Contrôleur/Action introuvable: $controller::$action");
+
+        if (!file_exists($file)) {
+            throw new RuntimeException("Contrôleur introuvable: $controller");
         }
-        
+
+        require_once $file;
+
+        if (!class_exists($controller, false)) {
+            throw new RuntimeException("Classe contrôleur introuvable: $controller");
+        }
+
+        $c = new $controller();
+        if (!method_exists($c, $action)) {
+            throw new RuntimeException("Action introuvable: $controller::$action");
+        }
+
         $c->$action(...$params);
     }
 }
