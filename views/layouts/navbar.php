@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="box-shadow: 0 2px 4px rgba(0,0,0,0.5);">
     <div class="container">
         <a class="navbar-brand fw-bold fs-4" href="<?= APP_URL ?>">
-            <img src="<?= APP_URL ?>/assets/img/driveloc-logo.svg" alt="DriveLoc" class="brand-logo">
+            <img src="<?= APP_URL ?>/assets/img/logo.png" alt="DriveLoc" class="brand-logo">
         </a>
 
         <button class="navbar-toggler" type="button"
