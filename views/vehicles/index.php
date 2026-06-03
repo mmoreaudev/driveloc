@@ -162,6 +162,9 @@ function fmt(string $d): string {
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <?php foreach ($vehicles as $v): ?>
             <div class="col">
+                <a href="<?= APP_URL ?>/vehicles/<?= $v['id'] ?>
+                    <?php if ($hasDates): ?>?start_date=<?= urlencode($filters['start_date']) ?>&end_date=<?= urlencode($filters['end_date']) ?><?php endif; ?>"
+                   class="text-decoration-none text-dark h-100">
                 <div class="card h-100 border-0" style="box-shadow: 2px 2px 4px 1px #252525;">
 
                     <?php if ($v['main_image']): ?>
@@ -218,6 +221,7 @@ function fmt(string $d): string {
                     </div>
 
                 </div>
+                </a>
             </div>
         <?php endforeach; ?>
     </div>
