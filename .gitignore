@@ -1,0 +1,15 @@
+# ── Secrets ──────────────────────────────────────────────────
+.env
+
+# ── Uploads utilisateurs (images véhicules) ──────────────────
+uploads/vehicles/*
+!uploads/vehicles/.htaccess
+!uploads/vehicles/.gitkeep
+
+# ── Éditeurs / IDEs ──────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
