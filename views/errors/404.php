@@ -11,7 +11,7 @@
 </head>
 <body class="bg-light d-flex align-items-center justify-content-center" style="min-height:100vh">
     <div class="text-center p-4">
-        <img src="<?= (defined('APP_URL') ? APP_URL : '') ?>/assets/img/driveloc-icon.svg" alt="DriveLoc" style="width:56px;height:56px" class="mb-2">
+        <img src="<?= (defined('APP_URL') ? APP_URL : '') ?>/assets/img/driveloc-logo.svg" alt="DriveLoc" style="height:56px;width:auto" class="mb-2">
         <i class="bi bi-map text-warning" style="font-size:4rem"></i>
         <h1 class="display-6 fw-bold mt-3">404 – Page introuvable</h1>
         <p class="text-muted">La page ou la ressource demandée n'existe pas.</p>

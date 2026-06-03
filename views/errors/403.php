@@ -11,7 +11,7 @@
 </head>
 <body class="bg-light d-flex align-items-center justify-content-center" style="min-height:100vh">
     <div class="text-center p-4">
-        <img src="<?= (defined('APP_URL') ? APP_URL : '') ?>/assets/img/driveloc-icon.svg" alt="DriveLoc" style="width:56px;height:56px" class="mb-2">
+        <img src="<?= (defined('APP_URL') ? APP_URL : '') ?>/assets/img/driveloc-logo.svg" alt="DriveLoc" style="height:56px;width:auto" class="mb-2">
         <i class="bi bi-shield-exclamation text-danger" style="font-size:4rem"></i>
         <h1 class="display-6 fw-bold mt-3">403 – Accès refusé</h1>
         <p class="text-muted">Vous n'avez pas les droits nécessaires pour accéder à cette page.</p>

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); ?>
 
-<div class="row g-4">
+<div class="row g-4 align-items-center" style="min-height: calc(100vh - 260px);">
 
     <div class="col-lg-7">
         <?php if ($vehicle['main_image']): ?>

@@ -86,17 +86,14 @@ h4 {
     color: var(--sixt-orange);
 }
 
-.brand-icon {
-    width: 30px;
-    height: 30px;
+.brand-logo {
+    height: 34px;
+    width: auto;
     object-fit: contain;
-    vertical-align: -0.25em;
 }
 
-.brand-icon-sm {
-    width: 22px;
-    height: 22px;
-    vertical-align: -0.15em;
+.brand-logo-sm {
+    height: 28px;
 }
 
 .navbar .nav-link {
