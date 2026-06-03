@@ -6,6 +6,9 @@ require_once ROOT_PATH . '/models/Vehicle.php';
 
 final class ReservationService
 {
+    private const MAX_RESERVATION_DAYS = 365;
+    private const MAX_TOTAL_PRICE = 99999999.99;
+
     public function createReservation(
         int $vehicleId,
         string $startDate,
@@ -58,8 +61,23 @@ final class ReservationService
             ];
         }
 
-        $nbDays     = $start->diff($end)->days;
+        $nbDays = (int) $start->diff($end)->days;
+        if ($nbDays <= 0 || $nbDays > self::MAX_RESERVATION_DAYS) {
+            return [
+                'ok' => false,
+                'message' => 'La duree maximale de reservation est de ' . self::MAX_RESERVATION_DAYS . ' jours.',
+                'redirect' => '/vehicles/' . $vehicleId,
+            ];
+        }
+
         $totalPrice = round((float) $vehicle['price_per_day'] * $nbDays, 2);
+        if ($totalPrice <= 0 || $totalPrice > self::MAX_TOTAL_PRICE) {
+            return [
+                'ok' => false,
+                'message' => 'Le montant total de la reservation depasse la limite autorisee.',
+                'redirect' => '/vehicles/' . $vehicleId,
+            ];
+        }
 
         $reservationModel->create(
             $vehicleId,
